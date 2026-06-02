@@ -6,17 +6,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: SSH Connect & Deploy
-        uses: appleboy/ssh-action@master
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SERVER_HOST }}
           port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
-          # 只保留私钥登录，删掉password字段（你没有配置PASSWORD密钥）
+          host-key-check: false
+          debug: true
           script: |
             cd /github/june || mkdir -p /github/june && cd /github/june
             git pull
