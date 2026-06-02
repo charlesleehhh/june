@@ -16,8 +16,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
-          host-key-check: false
           debug: true
           script: |
-            cd /github/june || mkdir -p /github/june && cd /github/june
+            cd /opt/data/charleslee/github/june
             git pull
