@@ -1,0 +1,20 @@
+name: Auto Deploy Server
+on:
+  push:
+    branches: [ main ] # 你提交的主分支，master就改master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+      - name: SSH部署服务器
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PWD }}
+          script: |
+            cd /github/june
+            git pull
+            # 这里补充你的启动命令，如docker restart、npm restart
