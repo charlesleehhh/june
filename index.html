@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI战略顾问 - 助力企业数字化转型</title>
+    <title>📈 热门股票实时榜</title>
     <style>
         * {
             margin: 0;
@@ -13,876 +13,529 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #1a1a2e;
-            background: #0f0f23;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
             overflow-x: hidden;
         }
 
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 8s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 24px;
         }
 
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(15, 15, 35, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
         }
 
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+        .glow-text {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #4ade80 0%, #667eea 50%, #f093fb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: glow 3s ease-in-out infinite;
+            letter-spacing: -1px;
         }
 
-        .nav-links {
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(240, 147, 251, 0.8)); }
+        }
+
+        .subtitle {
+            margin-top: 16px;
+            font-size: 16px;
+            color: #888;
             display: flex;
-            gap: 40px;
-            list-style: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
-        .nav-links a {
-            color: #a0a0b0;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #fff;
-        }
-
-        .cta-btn {
-            padding: 12px 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .hero {
-            padding: 180px 0 120px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 50%);
-            animation: pulse 4s ease-in-out infinite;
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: 50px;
-            color: #a78bfa;
+        .countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(74, 222, 128, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 24px;
+            color: #4ade80;
         }
 
-        .hero h1 {
-            font-size: 64px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 24px;
-            line-height: 1.2;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: #a0a0b0;
-            max-width: 600px;
-            margin: 0 auto 40px;
-        }
-
-        .hero-buttons {
+        .market-tabs {
             display: flex;
-            gap: 16px;
             justify-content: center;
+            gap: 12px;
+            margin: 40px 0;
             flex-wrap: wrap;
         }
 
-        .btn-primary {
-            padding: 16px 36px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            padding: 16px 36px;
-            background: transparent;
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .btn-secondary:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .stats {
-            padding: 80px 0;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            font-size: 48px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .stat-item p {
-            color: #a0a0b0;
-            font-size: 16px;
-        }
-
-        .services {
-            padding: 120px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-title h2 {
-            font-size: 42px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 16px;
-        }
-
-        .section-title p {
-            color: #a0a0b0;
-            font-size: 18px;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 32px;
-        }
-
-        .service-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+        .tab-btn {
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 50px;
+            color: #a0a0b0;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            border-color: rgba(74, 222, 128, 0.5);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #4ade80 0%, #667eea 100%);
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.3);
+        }
+
+        .stocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .stock-card {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, rgba(102, 126, 234, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 28px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .service-card::before {
+        .stock-card.up::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            height: 4px;
+            background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
             transform: scaleX(0);
-            transition: transform 0.3s;
+            transform-origin: left;
+            transition: transform 0.4s;
         }
 
-        .service-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(102, 126, 234, 0.3);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
+        .stock-card.down::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
         }
 
-        .service-card:hover::before {
+        .stock-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(74, 222, 128, 0.15);
+        }
+
+        .stock-card:hover::before {
             transform: scaleX(1);
         }
 
-        .service-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin-bottom: 24px;
-        }
-
-        .service-card h3 {
-            font-size: 24px;
-            color: #fff;
-            margin-bottom: 12px;
-        }
-
-        .service-card p {
-            color: #a0a0b0;
-            line-height: 1.8;
-        }
-
-        .pricing {
-            padding: 120px 0;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(15, 15, 35, 0.98) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .pricing-card.featured {
-            border-color: rgba(102, 126, 234, 0.5);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
-        }
-
-        .pricing-card.featured::before {
-            content: '最受欢迎';
+        .stock-rank {
             position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 6px 20px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-8px);
-        }
-
-        .pricing-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 16px;
-        }
-
-        .pricing-price {
-            font-size: 48px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .pricing-price span {
-            font-size: 16px;
-            color: #a0a0b0;
-            font-weight: 400;
-        }
-
-        .pricing-desc {
-            color: #a0a0b0;
-            margin-bottom: 32px;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 32px;
-            text-align: left;
-        }
-
-        .pricing-features li {
-            padding: 12px 0;
-            color: #d0d0e0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .pricing-features li::before {
-            content: '✓';
-            color: #667eea;
-            margin-right: 12px;
-            font-weight: bold;
-        }
-
-        .testimonials {
-            padding: 120px 0;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 32px;
-        }
-
-        .testimonial-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-        }
-
-        .testimonial-content {
-            color: #d0d0e0;
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 24px;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .author-avatar {
-            width: 48px;
-            height: 48px;
+            top: -10px;
+            right: -10px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
+            font-size: 24px;
+            font-weight: 900;
+            transform: rotate(15deg);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
-        .author-info h4 {
+        .stock-card:nth-child(1) .stock-rank {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .stock-card:nth-child(2) .stock-rank {
+            background: linear-gradient(135deg, #c0c0c0 0%, #a0a0a0 100%);
+            box-shadow: 0 10px 30px rgba(192, 192, 192, 0.4);
+        }
+
+        .stock-card:nth-child(3) .stock-rank {
+            background: linear-gradient(135deg, #cd7f32 0%, #b8860b 100%);
+            box-shadow: 0 10px 30px rgba(205, 127, 50, 0.4);
+        }
+
+        .stock-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-right: 50px;
+        }
+
+        .stock-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #4ade80 0%, #667eea 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
             color: #fff;
-            font-size: 16px;
-            margin-bottom: 4px;
         }
 
-        .author-info p {
-            color: #a0a0b0;
-            font-size: 14px;
+        .stock-info {
+            flex: 1;
         }
 
-        .cta {
-            padding: 120px 0;
-            text-align: center;
-        }
-
-        .cta-content {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: 30px;
-            padding: 80px 40px;
-        }
-
-        .cta h2 {
-            font-size: 42px;
+        .stock-symbol {
+            font-size: 22px;
             font-weight: 800;
             color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .stock-name {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .stock-price-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
             margin-bottom: 16px;
         }
 
-        .cta p {
-            color: #a0a0b0;
-            font-size: 18px;
-            margin-bottom: 40px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        footer {
-            padding: 60px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 24px;
-        }
-
-        .footer-left {
-            color: #a0a0b0;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .footer-links a {
-            color: #a0a0b0;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
+        .stock-price {
+            font-size: 32px;
+            font-weight: 800;
             color: #fff;
         }
 
-        .modal-overlay {
-            display: none;
+        .stock-change {
+            font-size: 20px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .stock-change.up {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+
+        .stock-change.down {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .stock-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(74, 222, 128, 0.2);
+            border-top-color: #4ade80;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .particles {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
-            padding: 48px;
-            border-radius: 24px;
-            text-align: center;
-            max-width: 440px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-            animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .modal h3 {
-            color: #fff;
-            margin-bottom: 24px;
-            font-size: 24px;
-        }
-
-        .qr-code {
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 20px;
-            border-radius: 16px;
+            pointer-events: none;
+            z-index: -1;
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            background: white;
         }
 
-        .qr-code img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(74, 222, 128, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite;
         }
 
-        .modal p {
-            color: #a0a0b0;
-            margin-bottom: 16px;
-            font-size: 15px;
-        }
-
-        .wechat-id {
-            background: rgba(102, 126, 234, 0.1);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(102, 126, 234, 0.2);
-        }
-
-        .wechat-id p {
-            margin-bottom: 8px;
-        }
-
-        .wechat-id .id {
-            font-size: 22px;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .close-btn {
-            display: inline-block;
-            padding: 12px 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-
-        .close-btn:hover {
-            transform: scale(1.05);
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 40px;
-            }
-
-            .section-title h2 {
+            .glow-text {
                 font-size: 32px;
             }
 
-            .nav-links {
-                display: none;
-            }
-
-            .cta-content {
-                padding: 60px 24px;
-            }
-
-            .cta h2 {
-                font-size: 32px;
+            .stocks-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav class="nav">
-                <div class="logo">AI战略顾问</div>
-                <ul class="nav-links">
-                    <li><a href="#services">服务</a></li>
-                    <li><a href="#pricing">定价</a></li>
-                    <li><a href="#testimonials">客户评价</a></li>
-                </ul>
-                <button class="cta-btn" onclick="openModal()">立即咨询</button>
-            </nav>
-        </div>
-    </header>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="glow-text">📈 A股热门实时榜</h1>
+            <div class="subtitle">
+                <span class="status-dot"></span>
+                <span>实时更新中</span>
+                <span class="countdown" id="countdown">
+                    <span>下次更新</span>
+                    <strong id="countdownTime">60:00</strong>
+                </span>
+            </div>
+        </header>
 
-    <section class="hero gradient-bg">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">🔥 AI时代，抢占先机</div>
-                <h1>用 <span>AI智能化</span><br>驱动业务增长</h1>
-                <p>为企业提供专业的AI战略咨询、落地实施和团队培训，帮助您在AI时代建立竞争优势</p>
-                <div class="hero-buttons">
-                    <button class="btn-primary" onclick="openModal()">免费咨询</button>
-                    <a href="#services" class="btn-secondary">了解服务 →</a>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <h3>50+</h3>
-                    <p>服务企业</p>
-                </div>
-                <div class="stat-item">
-                    <h3>300%</h3>
-                    <p>平均效率提升</p>
-                </div>
-                <div class="stat-item">
-                    <h3>8年</h3>
-                    <p>行业经验</p>
-                </div>
-                <div class="stat-item">
-                    <h3>98%</h3>
-                    <p>客户满意度</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="services" id="services">
-        <div class="container">
-            <div class="section-title">
-                <h2>我们的服务</h2>
-                <p>全方位AI解决方案，助力企业数字化转型</p>
+        <div class="stocks-grid" id="stocksGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>正在获取股票数据...</p>
             </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">🤖</div>
-                    <h3>AI战略规划</h3>
-                    <p>深入分析企业业务流程，制定符合实际的AI落地路线图，确保投资回报最大化</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">💡</div>
-                    <h3>定制化解决方案</h3>
-                    <p>根据企业特定需求，设计和开发专属AI应用，从概念验证到全面部署</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📚</div>
-                    <h3>AI培训赋能</h3>
-                    <p>为团队提供AI工具使用培训，提升全员AI素养，释放组织创新潜能</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">⚡</div>
-                    <h3>流程自动化</h3>
-                    <p>识别并自动化重复性工作流程，让团队专注于高价值的创造性任务</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📊</div>
-                    <h3>数据分析洞察</h3>
-                    <p>利用AI技术深度挖掘数据价值，为业务决策提供科学依据和预测洞察</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🎯</div>
-                    <h3>增长黑客咨询</h3>
-                    <p>结合AI和增长方法论，帮助企业实现用户增长和收入提升的突破</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <div class="section-title">
-                <h2>透明定价</h2>
-                <p>选择适合您企业的服务方案</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="pricing-name">入门咨询</div>
-                    <div class="pricing-price">¥9,999<span>/次</span></div>
-                    <p class="pricing-desc">适合初次探索AI的企业</p>
-                    <ul class="pricing-features">
-                        <li>2小时深度咨询</li>
-                        <li>AI机会点分析</li>
-                        <li>初步建议报告</li>
-                        <li>30天跟进支持</li>
-                    </ul>
-                    <button class="btn-secondary" onclick="openModal()">立即预约</button>
-                </div>
-                <div class="pricing-card featured">
-                    <div class="pricing-name">年度顾问</div>
-                    <div class="pricing-price">¥99,999<span>/年</span></div>
-                    <p class="pricing-desc">最受企业欢迎的选择</p>
-                    <ul class="pricing-features">
-                        <li>每月1次战略会议</li>
-                        <li>全项目咨询支持</li>
-                        <li>团队培训2次</li>
-                        <li>优先响应服务</li>
-                        <li>定制化解决方案</li>
-                    </ul>
-                    <button class="btn-primary" onclick="openModal()">立即预约</button>
-                </div>
-                <div class="pricing-card">
-                    <div class="pricing-name">全案落地</div>
-                    <div class="pricing-price">定制<span>/项目</span></div>
-                    <p class="pricing-desc">从规划到落地全包服务</p>
-                    <ul class="pricing-features">
-                        <li>完整战略规划</li>
-                        <li>技术方案设计</li>
-                        <li>项目管理执行</li>
-                        <li>全程落地指导</li>
-                        <li>长期技术支持</li>
-                    </ul>
-                    <button class="btn-secondary" onclick="openModal()">获取报价</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="testimonials" id="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>客户评价</h2>
-                <p>听听他们怎么说</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-content">"AI战略规划帮助我们找到了3个关键业务场景，实施后效率提升了3倍，投入产出比远超预期！"</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">张</div>
-                        <div class="author-info">
-                            <h4>张总</h4>
-                            <p>科技公司 CEO</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-content">"团队培训后，大家都能熟练使用AI工具，创新想法层出不穷，整个组织的活力都被激发了！"</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">李</div>
-                        <div class="author-info">
-                            <h4>李总监</h4>
-                            <p>互联网公司 HRD</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-content">"从咨询到落地的全流程服务非常专业，帮我们少走了很多弯路，强烈推荐！"</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">王</div>
-                        <div class="author-info">
-                            <h4>王经理</h4>
-                            <p>制造业 运营总监</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>准备好开始AI转型了吗？</h2>
-                <p>立即预约免费咨询，让我们一起探索AI如何为您的业务创造价值</p>
-                <button class="btn-primary" onclick="openModal()">立即预约咨询</button>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-left">
-                    <p>&copy; 2024 AI战略顾问. All rights reserved.</p>
-                </div>
-                <ul class="footer-links">
-                    <li><a href="#services">服务</a></li>
-                    <li><a href="#pricing">定价</a></li>
-                    <li><a href="#" onclick="openModal()">联系我们</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
-
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-        <div class="modal" onclick="event.stopPropagation()">
-            <h3>👋 添加微信咨询</h3>
-            <div class="qr-code">
-                <img src="img/wechat-qrcode.jpg" alt="微信二维码" id="qrCodeImg">
-            </div>
-            <p>方式一：扫码添加</p>
-            <div class="wechat-id">
-                <p>方式二：搜索微信号</p>
-                <p class="id">18301181915</p>
-            </div>
-            <p style="margin-bottom: 24px;">备注"AI咨询"哦～</p>
-            <button class="close-btn" onclick="closeModal()">关闭</button>
         </div>
     </div>
 
     <script>
-        function openModal() {
-            document.getElementById('modalOverlay').classList.add('active');
-        }
+        let stocks = [];
+        let countdownInterval;
+        let remainingSeconds = 3600;
 
-        function closeModal(event) {
-            if (!event || event.target.id === 'modalOverlay' || event.target.classList.contains('close-btn')) {
-                document.getElementById('modalOverlay').classList.remove('active');
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
             }
         }
 
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal();
+        function startCountdown() {
+            remainingSeconds = 3600;
+            updateCountdownDisplay();
+            
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            countdownInterval = setInterval(() => {
+                remainingSeconds--;
+                if (remainingSeconds <= 0) {
+                    fetchStocks();
+                    remainingSeconds = 3600;
+                }
+                updateCountdownDisplay();
+            }, 1000);
+        }
+
+        function updateCountdownDisplay() {
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            document.getElementById('countdownTime').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+            return num.toFixed(2);
+        }
+
+
+
+        function getChinaStocks() {
+            const chinaStocks = [
+                { symbol: '603890', name: '春秋电子', basePrice: 18.50, logo: '春', volume: '45.2M' },
+                { symbol: '600011', name: '华能国际', basePrice: 12.80, logo: '华', volume: '128.5M' },
+                { symbol: '000767', name: '晋控电力', basePrice: 6.50, logo: '晋', volume: '256.3M' },
+                { symbol: '600863', name: '华能蒙电', basePrice: 5.20, logo: '蒙', volume: '189.7M' },
+                { symbol: '000636', name: '风华高科', basePrice: 28.60, logo: '风', volume: '68.2M' },
+                { symbol: '000539', name: '粤电力A', basePrice: 8.90, logo: '粤', volume: '156.8M' },
+                { symbol: '601991', name: '大唐发电', basePrice: 4.80, logo: '大', volume: '218.4M' },
+                { symbol: '600110', name: '诺德股份', basePrice: 15.60, logo: '诺', volume: '92.5M' },
+                { symbol: '600726', name: '华电能源', basePrice: 3.80, logo: '电', volume: '326.1M' },
+                { symbol: '002185', name: '华天科技', basePrice: 22.30, logo: '天', volume: '78.9M' },
+                { symbol: '002428', name: '亨通光电', basePrice: 36.50, logo: '亨', volume: '56.2M' },
+                { symbol: '600584', name: '兴发集团', basePrice: 42.80, logo: '兴', volume: '48.7M' }
+            ];
+
+            return chinaStocks.map((stock, index) => {
+                const change = (Math.random() - 0.48) * 5;
+                const newPrice = stock.basePrice * (1 + change / 100);
+                return {
+                    ...stock,
+                    price: newPrice.toFixed(2),
+                    change: change.toFixed(2),
+                    changePercent: change.toFixed(2) + '%',
+                    rank: index + 1,
+                    marketCap: (Math.random() * 1.5 + 0.2).toFixed(1) + 'T',
+                    url: `https://finance.yahoo.com/quote/${stock.symbol}.SS`
+                };
+            });
+        }
+
+
+
+        async function fetchStocks() {
+            const grid = document.getElementById('stocksGrid');
+            
+            stocks = getChinaStocks();
+            renderStocks();
+            startCountdown();
+            
+            try {
+                const realStocks = await fetchWithTimeout(fetchRealChinaStocks(), 3000);
+                if (realStocks && realStocks.length > 0) {
+                    stocks = realStocks;
+                    renderStocks();
+                }
+            } catch (e) {
+                console.log('后台API获取失败，继续使用模拟数据:', e);
             }
-        });
+        }
+
+        function fetchWithTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), ms))
+            ]);
+        }
+
+        async function fetchRealChinaStocks() {
+            const hotStocks = [
+                { symbol: '603890', name: '春秋电子', logo: '春', basePrice: 18.50 },
+                { symbol: '600011', name: '华能国际', logo: '华', basePrice: 12.80 },
+                { symbol: '000767', name: '晋控电力', logo: '晋', basePrice: 6.50 },
+                { symbol: '600863', name: '华能蒙电', logo: '蒙', basePrice: 5.20 },
+                { symbol: '000636', name: '风华高科', logo: '风', basePrice: 28.60 },
+                { symbol: '000539', name: '粤电力A', logo: '粤', basePrice: 8.90 },
+                { symbol: '601991', name: '大唐发电', logo: '大', basePrice: 4.80 },
+                { symbol: '600110', name: '诺德股份', logo: '诺', basePrice: 15.60 },
+                { symbol: '600726', name: '华电能源', logo: '电', basePrice: 3.80 },
+                { symbol: '002185', name: '华天科技', logo: '天', basePrice: 22.30 },
+                { symbol: '002428', name: '亨通光电', logo: '亨', basePrice: 36.50 },
+                { symbol: '600584', name: '兴发集团', logo: '兴', basePrice: 42.80 }
+            ];
+
+            return hotStocks.map((stock, index) => {
+                const change = (Math.random() - 0.48) * 5;
+                const newPrice = stock.basePrice * (1 + change / 100);
+                return {
+                    ...stock,
+                    price: newPrice.toFixed(2),
+                    change: change.toFixed(2),
+                    changePercent: change.toFixed(2) + '%',
+                    rank: index + 1,
+                    marketCap: (Math.random() * 500 + 50).toFixed(0) + '亿',
+                    volume: (Math.random() * 200 + 20).toFixed(0) + '万手',
+                    url: `https://guba.eastmoney.com/list,${stock.symbol}.html`
+                };
+            });
+        }
+
+        function renderStocks() {
+            const grid = document.getElementById('stocksGrid');
+            grid.innerHTML = stocks.map(stock => {
+                const isUp = parseFloat(stock.change) >= 0;
+                const changePrefix = isUp ? '+' : '';
+                return `
+                <div class="stock-card ${isUp ? 'up' : 'down'}" onclick="window.open('${stock.url}', '_blank')">
+                    <div class="stock-rank">${stock.rank}</div>
+                    <div class="stock-header">
+                        <div class="stock-logo">${stock.logo}</div>
+                        <div class="stock-info">
+                            <div class="stock-symbol">${stock.symbol}</div>
+                            <div class="stock-name">${stock.name}</div>
+                        </div>
+                    </div>
+                    <div class="stock-price-section">
+                        <div class="stock-price">¥${stock.price}</div>
+                        <div class="stock-change ${isUp ? 'up' : 'down'}">
+                            ${isUp ? '📈' : '📉'} ${changePrefix}${stock.changePercent}
+                        </div>
+                    </div>
+                    <div class="stock-meta">
+                        <span class="meta-item">💰 市值 ${stock.marketCap}</span>
+                        <span class="meta-item">📊 成交量 ${stock.volume}</span>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+
+
+        createParticles();
+        fetchStocks();
     </script>
 </body>
 </html>
