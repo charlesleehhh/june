@@ -6,15 +6,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Source
         uses: actions/checkout@v4
-      - name: SSH deploy to ECS
+
+      - name: SSH Connect & Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }} # 补充端口
+          port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_PRIVATE_KEY }} # 使用私钥，删除password字段
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          # 只保留私钥登录，删掉password字段（你没有配置PASSWORD密钥）
           script: |
-            cd /github/june
+            cd /github/june || mkdir -p /github/june && cd /github/june
             git pull
