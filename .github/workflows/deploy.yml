@@ -20,12 +20,19 @@ jobs:
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           debug: true
           script: |
+            # 安全创建目录
             mkdir -p /opt/data/charleslee/github/june
             cd /opt/data/charleslee/github/june
+
+            # 如果不是 git 仓库，初始化并添加 origin
             if [ ! -d .git ]; then
               git init
+              git remote add origin https://charlesleehhh:${GIT_TOKEN}@github.com/charlesleehhh/june.git
+            else
+              # 如果已存在，更新 origin 地址
+              git remote set-url origin https://charlesleehhh:${GIT_TOKEN}@github.com/charlesleehhh/june.git
             fi
-            # 运行时从环境变量读取token，yml文件无明文密钥
-            git remote set-url origin https://charlesleehhh:${GIT_TOKEN}@github.com/charlesleehhh/june.git
+
+            # 拉取最新代码
             git fetch origin
             git reset --hard origin/main
