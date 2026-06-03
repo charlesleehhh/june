@@ -21,9 +21,13 @@ jobs:
             mkdir -p /opt/data/charleslee/github/june
             cd /opt/data/charleslee/github/june
 
-            # 不存在Git仓库则初始化 + 设置SSH地址
+            # 不存在Git仓库则初始化
             if [ ! -d .git ]; then
               git init
+            fi
+
+            # 关键修复：只有不存在 origin 时才添加
+            if ! git remote | grep -q "^origin$"; then
               git remote add origin git@github.com:charlesleehhh/june.git
             fi
 
