@@ -2,37 +2,31 @@ name: Auto Deploy Server
 on:
   push:
     branches: [ main ]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Deploy via SSH
+      - name: Deploy to Server
         uses: appleboy/ssh-action@v1.2.0
-        env:
-          GIT_TOKEN: ${{ secrets.GIT_PUSH_TOKEN }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
-          debug: true
           script: |
-            # 安全创建目录
+            # 自动创建目录
             mkdir -p /opt/data/charleslee/github/june
             cd /opt/data/charleslee/github/june
 
-            # 如果不是 git 仓库，初始化并添加 origin
+            # 不存在Git仓库则初始化 + 设置SSH地址
             if [ ! -d .git ]; then
               git init
-              git remote add origin https://charlesleehhh:${GIT_TOKEN}@github.com/charlesleehhh/june.git
-            else
-              # 如果已存在，更新 origin 地址
-              git remote set-url origin https://charlesleehhh:${GIT_TOKEN}@github.com/charlesleehhh/june.git
+              git remote add origin git@github.com:charlesleehhh/june.git
             fi
 
-            # 拉取最新代码
+            # 强制拉最新代码
             git fetch origin
             git reset --hard origin/main
