@@ -11,6 +11,8 @@ jobs:
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_PUSH_TOKEN }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           port: ${{ secrets.SERVER_PORT }}
@@ -18,20 +20,12 @@ jobs:
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           debug: true
           script: |
-            # 自动创建目录（不存在就创建，不会删除）
             mkdir -p /opt/data/charleslee/github/june
-            
-            # 进入项目目录
             cd /opt/data/charleslee/github/june
-            
-            # 如果不是Git仓库，自动初始化
             if [ ! -d .git ]; then
               git init
             fi
-            
-            # 强制设置你的远程仓库（已带Token，免密拉取）
-            git remote set-url origin https://charlesleehhh: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@github.com/charlesleehhh/june.git
-            
-            # 拉取最新代码，强制覆盖本地（最稳定）
+            # 运行时从环境变量读取token，yml文件无明文密钥
+            git remote set-url origin https://charlesleehhh:${GIT_TOKEN}@github.com/charlesleehhh/june.git
             git fetch origin
             git reset --hard origin/main
