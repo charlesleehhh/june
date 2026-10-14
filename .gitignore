@@ -8,3 +8,7 @@ github-deploy-key.pub
 # 本地开发
 *.smoke.js
 _*.js
+
+# Java 后端
+backend/target/
+backend/config.properties

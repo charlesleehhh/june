@@ -34,3 +34,6 @@ jobs:
             # 强制拉最新代码
             git fetch origin
             git reset --hard origin/main
+
+            # 爬虫生成的数据文件由服务器本地维护，git 部署不覆盖
+            git update-index --skip-worktree data/prices.json || true
