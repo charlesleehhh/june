@@ -33,7 +33,7 @@
 | `java -jar price-radar-crawler.jar --ingest prices.csv config.properties` | 离线导入价格（批量补数据） |
 | `java -jar price-radar-crawler.jar --diagnose config.properties` | 四层网络诊断（DNS→TCP→HTTP→解析） |
 
-程序特性：单次运行即退出（无常驻）；数据库不可达 10 秒内失败退出；**0 条写入时绝不覆盖线上 JSON**；每次运行写 `fetch_log`。
+程序特性：单次运行即退出（无常驻）；数据库不可达 10 秒内失败退出；**0 条写入时绝不覆盖线上 JSON**；每次运行写运行日志表。
 
 ## 三、数据库初始化（你自己执行 SQL）
 
@@ -46,7 +46,30 @@ mysql -h <host> -P <port> -u <user> -p <db> < database/seed.sql     # 真实价�
 `seed.sql` 内容（共 5 段）：苹果团渠道 → 由真实成交回填的历史价格 → 当日 16 条实时报价 → 15 笔真实成交 → 前期公开报道记录。
 执行后校验语句会自动打印各表行数。
 
-表结构：`variant` `channel` `price_record` `market_event` `tuan_order` `fetch_log`，字段与前端 JSON 一一对应。
+### 表命名约定：统一前缀 `radar_`
+
+为便于与同库其它项目区分管理，所有表和**外键**统一带 `radar_` 前缀：
+
+| 表 | 用途 |
+|---|---|
+| `radar_variant` | 机型配置 + 官网定价 |
+| `radar_channel` | 销售渠道 |
+| `radar_price_record` | 价格历史快照（核心表，含 `prev_price` 用于算涨跌） |
+| `radar_tuan_order` | 苹果团真实成交记录 |
+| `radar_market_event` | 行情大事记 |
+| `radar_fetch_log` | 每次运行日志 |
+
+外键名为 `fk_radar_*`——MySQL 要求外键名**全库唯一**，共用库时若不加前缀容易与其它项目撞名。
+
+**要换前缀**只改三处：`backend/src/main/java/fun/charleslee/radar/Tables.java` 的 `PFX` 常量，
+以及 `database/schema.sql`、`database/seed.sql`（一条命令批量替换）：
+
+```bash
+perl -pi -e 's/\bradar_/新前缀_/g' database/schema.sql database/seed.sql
+```
+
+> 之前若执行过无前缀的旧版建表语句，`schema.sql` 顶部有一行清理旧表的语句（默认注释掉，建议先备份再执行）。
+> 若表已存在但缺列（如 `prev_price`），`CREATE TABLE IF NOT EXISTS` 不会补列，`schema.sql` 顶部也给了对应的 `ALTER TABLE`。
 
 ## 四、管理员后台（只有你能进）
 

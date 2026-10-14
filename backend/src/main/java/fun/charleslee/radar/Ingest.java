@@ -7,8 +7,10 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
+import static fun.charleslee.radar.Tables.FETCH_LOG;
+
 /**
- * 离线导入：把手工整理（或用前端「数据维护」页导出）的价格写进数据库并重新生成 JSON。
+ * 离线导入：把手工整理的价格写进数据库并重新生成 JSON。
  * 用法：
  *   java -jar price-radar-crawler.jar --ingest prices.csv config.properties
  *   java -jar price-radar-crawler.jar --ingest prices.json config.properties
@@ -64,7 +66,7 @@ public class Ingest {
             } else {
                 System.out.println("[ingest] 没有可用记录（写入 0，跳过 " + skip + "）");
             }
-            db.update("INSERT INTO fetch_log (status, message, records) VALUES (?,?,?)",
+            db.update("INSERT INTO " + FETCH_LOG + " (status, message, records) VALUES (?,?,?)",
                     ok > 0 ? "OK" : "PARTIAL", "离线导入 " + file + "：成功 " + ok + " 跳过 " + skip, ok);
         }
     }

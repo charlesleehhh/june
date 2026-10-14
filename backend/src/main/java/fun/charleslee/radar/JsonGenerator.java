@@ -15,6 +15,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static fun.charleslee.radar.Tables.CHANNEL;
+import static fun.charleslee.radar.Tables.MARKET_EVENT;
+import static fun.charleslee.radar.Tables.PRICE_RECORD;
+import static fun.charleslee.radar.Tables.TUAN_ORDER;
+import static fun.charleslee.radar.Tables.VARIANT;
+
 /** 从数据库聚合生成前端 data/prices.json，结构与前端 app.js 的预期完全一致。先写临时文件再原子替换。 */
 public class JsonGenerator {
 
@@ -34,7 +40,7 @@ public class JsonGenerator {
 
         List<Map<String, Object>> variants = new ArrayList<>();
         for (Map<String, Object> v : db.query(
-                "SELECT code, series, storage, gb, official_price FROM variant WHERE status=1 ORDER BY series, gb")) {
+                "SELECT code, series, storage, gb, official_price FROM " + VARIANT + " WHERE status=1 ORDER BY series, gb")) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("id", v.get("code"));
             m.put("series", v.get("series"));
@@ -47,7 +53,7 @@ public class JsonGenerator {
 
         List<Map<String, Object>> channels = new ArrayList<>();
         for (Map<String, Object> c : db.query(
-                "SELECT code, name, kind, sort, service, buy_url FROM channel WHERE status=1 ORDER BY sort")) {
+                "SELECT code, name, kind, sort, service, buy_url FROM " + CHANNEL + " WHERE status=1 ORDER BY sort")) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("id", c.get("code"));
             m.put("name", c.get("name"));
@@ -62,7 +68,8 @@ public class JsonGenerator {
         List<Map<String, Object>> records = new ArrayList<>();
         for (Map<String, Object> r : db.query(
                 "SELECT v.code AS variant, c.code AS channel, r.trade_date, r.price, r.in_stock, r.promo, r.source " +
-                "FROM price_record r JOIN variant v ON v.id=r.variant_id JOIN channel c ON c.id=r.channel_id " +
+                "FROM " + PRICE_RECORD + " r JOIN " + VARIANT + " v ON v.id=r.variant_id " +
+                "JOIN " + CHANNEL + " c ON c.id=r.channel_id " +
                 "ORDER BY r.trade_date, v.code, c.code")) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("variant", r.get("variant"));
@@ -77,7 +84,7 @@ public class JsonGenerator {
         root.put("records", records);
 
         List<Map<String, Object>> events = new ArrayList<>();
-        for (Map<String, Object> e : db.query("SELECT ev_date, kind, title, body FROM market_event ORDER BY ev_date")) {
+        for (Map<String, Object> e : db.query("SELECT ev_date, kind, title, body FROM " + MARKET_EVENT + " ORDER BY ev_date")) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("date", ((Date) e.get("ev_date")).toLocalDate().toString());
             m.put("kind", e.get("kind"));
@@ -91,7 +98,8 @@ public class JsonGenerator {
         List<Map<String, Object>> orders = new ArrayList<>();
         for (Map<String, Object> o : db.query(
                 "SELECT o.order_no, o.trade_at, v.code AS variant, c.code AS channel, o.color, o.list_price, o.paid " +
-                "FROM tuan_order o JOIN variant v ON v.id=o.variant_id JOIN channel c ON c.id=o.channel_id " +
+                "FROM " + TUAN_ORDER + " o JOIN " + VARIANT + " v ON v.id=o.variant_id " +
+                "JOIN " + CHANNEL + " c ON c.id=o.channel_id " +
                 "ORDER BY o.trade_at DESC LIMIT 40")) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("orderNo", mask(String.valueOf(o.get("order_no"))));
@@ -106,7 +114,10 @@ public class JsonGenerator {
         root.put("orders", orders);
 
         Path out = Paths.get(cfg.outputJsonPath);
-        if (out.getParent() != null) Files.createDirectories(out.getParent());
+        // 注意用 isDirectory（跟随符号链接）：macOS 的 /tmp 是符号链接，
+        // 直接 createDirectories 会误判为「已存在但不是目录」而抛异常。
+        Path parent = out.toAbsolutePath().getParent();
+        if (parent != null && !Files.isDirectory(parent)) Files.createDirectories(parent);
         Path tmp = Paths.get(out + ".tmp");
         try (FileOutputStream fos = new FileOutputStream(tmp.toFile())) {
             om.writeValue(fos, root);

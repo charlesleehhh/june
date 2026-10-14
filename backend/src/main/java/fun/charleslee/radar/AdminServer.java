@@ -18,6 +18,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static fun.charleslee.radar.Tables.CHANNEL;
+import static fun.charleslee.radar.Tables.FETCH_LOG;
+import static fun.charleslee.radar.Tables.MARKET_EVENT;
+import static fun.charleslee.radar.Tables.PRICE_RECORD;
+import static fun.charleslee.radar.Tables.VARIANT;
+
 /**
  * 管理员后台（仅管理员可访问）。
  * 启动：java -jar price-radar-crawler.jar --serve config.properties
@@ -95,7 +101,7 @@ public class AdminServer {
             root.put("today", LocalDate.now().toString());
 
             List<Map<String, Object>> variants = new ArrayList<>();
-            for (Map<String, Object> v : db.query("SELECT code, series, storage, official_price FROM variant WHERE status=1 ORDER BY series, gb")) {
+            for (Map<String, Object> v : db.query("SELECT code, series, storage, official_price FROM " + VARIANT + " WHERE status=1 ORDER BY series, gb")) {
                 Map<String, Object> m = new LinkedHashMap<>();
                 m.put("code", v.get("code"));
                 m.put("series", v.get("series"));
@@ -106,7 +112,7 @@ public class AdminServer {
             root.put("variants", variants);
 
             List<Map<String, Object>> channels = new ArrayList<>();
-            for (Map<String, Object> c : db.query("SELECT code, name FROM channel WHERE status=1 ORDER BY sort")) {
+            for (Map<String, Object> c : db.query("SELECT code, name FROM " + CHANNEL + " WHERE status=1 ORDER BY sort")) {
                 Map<String, Object> m = new LinkedHashMap<>();
                 m.put("code", c.get("code"));
                 m.put("name", c.get("name"));
@@ -118,7 +124,8 @@ public class AdminServer {
             Map<String, Map<String, Object>> latest = new LinkedHashMap<>();
             for (Map<String, Object> r : db.query(
                     "SELECT v.code AS variant, c.code AS channel, r.trade_date, r.price, r.promo " +
-                    "FROM price_record r JOIN variant v ON v.id=r.variant_id JOIN channel c ON c.id=r.channel_id " +
+                    "FROM " + PRICE_RECORD + " r JOIN " + VARIANT + " v ON v.id=r.variant_id " +
+                    "JOIN " + CHANNEL + " c ON c.id=r.channel_id " +
                     "ORDER BY r.trade_date ASC, r.id ASC")) {
                 String key = r.get("variant") + "|" + r.get("channel");
                 Map<String, Object> rec = new LinkedHashMap<>();
@@ -130,7 +137,7 @@ public class AdminServer {
             root.put("latest", latest);
 
             List<Map<String, Object>> events = new ArrayList<>();
-            for (Map<String, Object> e : db.query("SELECT ev_date, kind, title, body FROM market_event ORDER BY ev_date")) {
+            for (Map<String, Object> e : db.query("SELECT ev_date, kind, title, body FROM " + MARKET_EVENT + " ORDER BY ev_date")) {
                 Map<String, Object> m = new LinkedHashMap<>();
                 m.put("date", e.get("ev_date").toString());
                 m.put("kind", e.get("kind"));
@@ -165,7 +172,7 @@ public class AdminServer {
                 }
             }
             JsonGenerator.generate(db, cfg);
-            db.update("INSERT INTO fetch_log (status, message, records) VALUES (?,?,?)",
+            db.update("INSERT INTO " + FETCH_LOG + " (status, message, records) VALUES (?,?,?)",
                     "OK", "后台录入 " + ok + " 条（跳过 " + skip + "）", ok);
         }
         return "{\"ok\":" + ok + ",\"skip\":" + skip + "}";
@@ -176,12 +183,12 @@ public class AdminServer {
         JsonNode arr = JSON.readTree(body);
         int n = 0;
         try (Db db = new Db(cfg)) {
-            db.update("DELETE FROM market_event");
+            db.update("DELETE FROM " + MARKET_EVENT);
             for (JsonNode e : arr) {
                 String date = e.path("date").asText("");
                 String title = e.path("title").asText("");
                 if (date.isEmpty() || title.isEmpty()) continue;
-                db.update("INSERT INTO market_event (ev_date, kind, title, body) VALUES (?,?,?,?)",
+                db.update("INSERT INTO " + MARKET_EVENT + " (ev_date, kind, title, body) VALUES (?,?,?,?)",
                         date, e.path("kind").asText("milestone"), title, e.path("body").asText(null));
                 n++;
             }
@@ -195,7 +202,8 @@ public class AdminServer {
         try (Db db = new Db(cfg)) {
             for (Map<String, Object> r : db.query(
                     "SELECT v.code AS variant, c.code AS channel, r.trade_date, r.price, r.promo, r.source " +
-                    "FROM price_record r JOIN variant v ON v.id=r.variant_id JOIN channel c ON c.id=r.channel_id " +
+                    "FROM " + PRICE_RECORD + " r JOIN " + VARIANT + " v ON v.id=r.variant_id " +
+                    "JOIN " + CHANNEL + " c ON c.id=r.channel_id " +
                     "ORDER BY r.trade_date DESC LIMIT 2000")) {
                 sb.append(r.get("variant")).append(',').append(r.get("channel")).append(',')
                   .append(r.get("trade_date")).append(',').append(r.get("price")).append(',')

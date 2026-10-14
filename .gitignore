@@ -17,3 +17,6 @@ backend/dependency-reduced-pom.xml
 # IDE
 .idea/
 *.iml
+
+# 助手项目记忆（仅本地，绝不上线）
+.workbuddy/

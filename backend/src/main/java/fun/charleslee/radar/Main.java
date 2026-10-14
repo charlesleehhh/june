@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static fun.charleslee.radar.Tables.CHANNEL;
+import static fun.charleslee.radar.Tables.FETCH_LOG;
+import static fun.charleslee.radar.Tables.VARIANT;
+
 /**
  * 果价雷达主程序：单次运行后退出（crontab 定时触发，无常驻进程）。
  *
@@ -181,20 +185,20 @@ public class Main {
 
     private static void writeLog(Config cfg, String status, String msg, int written) {
         try (Db d = new Db(cfg)) {
-            d.update("INSERT INTO fetch_log (status, message, records) VALUES (?,?,?)", status, msg, written);
+            d.update("INSERT INTO " + FETCH_LOG + " (status, message, records) VALUES (?,?,?)", status, msg, written);
         } catch (Exception ignore) {
             System.err.println("[warn] fetch_log 写入失败（不影响主流程）");
         }
     }
 
     static int requireVariantId(Db db, String code) throws Exception {
-        List<Map<String, Object>> rows = db.query("SELECT id FROM variant WHERE code=?", code);
+        List<Map<String, Object>> rows = db.query("SELECT id FROM " + VARIANT + " WHERE code=?", code);
         if (rows.isEmpty()) throw new IllegalStateException("variant 不存在: " + code);
         return ((Number) rows.get(0).get("id")).intValue();
     }
 
     static int requireChannelId(Db db, String code) throws Exception {
-        List<Map<String, Object>> rows = db.query("SELECT id FROM channel WHERE code=?", code);
+        List<Map<String, Object>> rows = db.query("SELECT id FROM " + CHANNEL + " WHERE code=?", code);
         if (rows.isEmpty()) throw new IllegalStateException("channel 不存在: " + code);
         return ((Number) rows.get(0).get("id")).intValue();
     }

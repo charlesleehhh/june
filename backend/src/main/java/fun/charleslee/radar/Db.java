@@ -11,6 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static fun.charleslee.radar.Tables.PRICE_RECORD;
+import static fun.charleslee.radar.Tables.TUAN_ORDER;
+
 /** 极简 JDBC 封装，无连接池（单次运行、几分钟内退出，够用）。 */
 public class Db implements AutoCloseable {
     private final Connection conn;
@@ -54,7 +57,7 @@ public class Db implements AutoCloseable {
     /** 取某配置+渠道最近一次价格（按日期倒序取第一条），用于填充 prev_price。 */
     public Integer latestPrice(int variantId, int channelId) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT price FROM price_record WHERE variant_id=? AND channel_id=? " +
+                "SELECT price FROM " + PRICE_RECORD + " WHERE variant_id=? AND channel_id=? " +
                 "ORDER BY trade_date DESC, id DESC LIMIT 1")) {
             ps.setInt(1, variantId);
             ps.setInt(2, channelId);
@@ -68,13 +71,13 @@ public class Db implements AutoCloseable {
     public void upsertPrice(int variantId, int channelId, String date, int price,
                             boolean inStock, String promo, String source) throws SQLException {
         Integer prev = latestPrice(variantId, channelId);
-        update("INSERT INTO price_record (variant_id, channel_id, trade_date, price, in_stock, promo, source) " +
+        update("INSERT INTO " + PRICE_RECORD + " (variant_id, channel_id, trade_date, price, in_stock, promo, source) " +
                "VALUES (?,?,?,?,?,?,?) " +
                "ON DUPLICATE KEY UPDATE price=VALUES(price), in_stock=VALUES(in_stock), " +
                "promo=VALUES(promo), source=VALUES(source), collected_at=NOW()",
                variantId, channelId, date, price, inStock ? 1 : 0, promo, source);
         if (prev != null && prev != price) {
-            update("UPDATE price_record SET prev_price=? WHERE variant_id=? AND channel_id=? AND trade_date=?",
+            update("UPDATE " + PRICE_RECORD + " SET prev_price=? WHERE variant_id=? AND channel_id=? AND trade_date=?",
                    prev, variantId, channelId, date);
         }
     }
@@ -86,7 +89,7 @@ public class Db implements AutoCloseable {
     /** 写入一条苹果团成交记录（真实订单，用于前端「最近成交」与历史回填）。 */
     public void upsertOrder(String orderNo, String tradeAt, int variantId, int channelId,
                             String color, int listPrice, double paid) throws SQLException {
-        update("INSERT INTO tuan_order (order_no, trade_at, variant_id, channel_id, color, list_price, paid) " +
+        update("INSERT INTO " + TUAN_ORDER + " (order_no, trade_at, variant_id, channel_id, color, list_price, paid) " +
                "VALUES (?,?,?,?,?,?,?) " +
                "ON DUPLICATE KEY UPDATE paid=VALUES(paid), color=VALUES(color)",
                orderNo, tradeAt, variantId, channelId, color, listPrice, paid);
@@ -95,7 +98,7 @@ public class Db implements AutoCloseable {
     /** 某配置某渠道在指定日期的最低价成交（用于历史回填）。 */
     public Double minPaidOn(String date, int variantId, int channelId) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT MIN(paid) FROM tuan_order WHERE DATE(trade_at)=? AND variant_id=? AND channel_id=?")) {
+                "SELECT MIN(paid) FROM " + TUAN_ORDER + " WHERE DATE(trade_at)=? AND variant_id=? AND channel_id=?")) {
             ps.setString(1, date);
             ps.setInt(2, variantId);
             ps.setInt(3, channelId);
@@ -109,7 +112,7 @@ public class Db implements AutoCloseable {
     public java.util.Set<String> existingOrderKeys() throws SQLException {
         java.util.Set<String> keys = new java.util.HashSet<>();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT DATE(trade_at) d, variant_id v, channel_id c FROM tuan_order");
+                "SELECT DATE(trade_at) d, variant_id v, channel_id c FROM " + TUAN_ORDER);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) keys.add(rs.getString("d") + "|" + rs.getInt("v") + "|" + rs.getInt("c"));
         }
