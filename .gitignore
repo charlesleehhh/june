@@ -1,0 +1,10 @@
+# 密钥：绝不入库，服务器上单独保管
+github-deploy-key
+github-deploy-key.pub
+
+# macOS
+.DS_Store
+
+# 本地开发
+*.smoke.js
+_*.js

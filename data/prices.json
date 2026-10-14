@@ -1,0 +1,800 @@
+{
+  "meta": {
+    "updatedAt": "2026-10-14",
+    "launchDate": "2026-09-18",
+    "currency": "CNY",
+    "title": "果价雷达",
+    "subtitle": "iPhone 18 Pro 全网比价",
+    "notice": "价格均为公开渠道信息整理，仅供比价参考，不构成购买建议。请以各平台实时页面为准。"
+  },
+  "variants": [
+    {
+      "id": "pro-256",
+      "series": "iPhone 18 Pro",
+      "storage": "256GB",
+      "gb": 256,
+      "official": 9999
+    },
+    {
+      "id": "pro-512",
+      "series": "iPhone 18 Pro",
+      "storage": "512GB",
+      "gb": 512,
+      "official": 11999
+    },
+    {
+      "id": "pro-1024",
+      "series": "iPhone 18 Pro",
+      "storage": "1TB",
+      "gb": 1024,
+      "official": 15499
+    },
+    {
+      "id": "pro-2048",
+      "series": "iPhone 18 Pro",
+      "storage": "2TB",
+      "gb": 2048,
+      "official": 20499
+    },
+    {
+      "id": "max-256",
+      "series": "iPhone 18 Pro Max",
+      "storage": "256GB",
+      "gb": 256,
+      "official": 10999
+    },
+    {
+      "id": "max-512",
+      "series": "iPhone 18 Pro Max",
+      "storage": "512GB",
+      "gb": 512,
+      "official": 12999
+    },
+    {
+      "id": "max-1024",
+      "series": "iPhone 18 Pro Max",
+      "storage": "1TB",
+      "gb": 1024,
+      "official": 16499
+    },
+    {
+      "id": "max-2048",
+      "series": "iPhone 18 Pro Max",
+      "storage": "2TB",
+      "gb": 2048,
+      "official": 21499
+    }
+  ],
+  "channels": [
+    {
+      "id": "apple",
+      "name": "Apple 官网",
+      "kind": "official",
+      "sort": 1,
+      "service": "14 天激活可退，最长 24 期免息",
+      "buyUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-18-pro/"
+    },
+    {
+      "id": "tmall",
+      "name": "Apple 天猫官方旗舰店",
+      "kind": "official",
+      "sort": 2,
+      "service": "24 期免息，以旧换新至高补贴 900 元",
+      "buyUrl": ""
+    },
+    {
+      "id": "jd",
+      "name": "京东自营",
+      "kind": "self",
+      "sort": 3,
+      "service": "以旧换新至高补贴 900 元，限量 24 期免息券",
+      "buyUrl": ""
+    },
+    {
+      "id": "unicom",
+      "name": "中国联通天猫旗舰店",
+      "kind": "operator",
+      "sort": 4,
+      "service": "12 期免息，淘金币抵扣",
+      "buyUrl": ""
+    },
+    {
+      "id": "pdd",
+      "name": "拼多多百亿补贴",
+      "kind": "subsidy",
+      "sort": 5,
+      "service": "需当面签收激活，激活后不支持无理由退换",
+      "buyUrl": ""
+    },
+    {
+      "id": "dewu",
+      "name": "得物",
+      "kind": "resale",
+      "sort": 6,
+      "service": "二级市场成交均价，非官方渠道，行情波动大",
+      "buyUrl": ""
+    }
+  ],
+  "records": [
+    {
+      "variant": "max-2048",
+      "channel": "dewu",
+      "date": "2026-09-12",
+      "price": 23844,
+      "inStock": true,
+      "promo": "预售首日高点（银色）",
+      "source": "公开报道：得物 App 成交均价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "dewu",
+      "date": "2026-09-12",
+      "price": 13888,
+      "inStock": true,
+      "promo": "预售首日高点（勃艮第酒红）",
+      "source": "公开报道：得物 App 成交均价"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 16499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 16499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 16499,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 16499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 21499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 21499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 21499,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 21499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 10999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 10999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-256",
+      "channel": "pdd",
+      "date": "2026-09-18",
+      "price": 10999,
+      "inStock": true,
+      "promo": "首发平价放量",
+      "source": "公开报道：百亿补贴到手价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 10999,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-256",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 10999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "max-512",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 12999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-512",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 12999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 12999,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-512",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 12999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 15499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 15499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 15499,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 15499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 20499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 20499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 20499,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 20499,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 9999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 9999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "pdd",
+      "date": "2026-09-18",
+      "price": 9999,
+      "inStock": true,
+      "promo": "首发平价放量",
+      "source": "公开报道：百亿补贴到手价"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 9999,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 9999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "apple",
+      "date": "2026-09-18",
+      "price": 11999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "jd",
+      "date": "2026-09-18",
+      "price": 11999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "tmall",
+      "date": "2026-09-18",
+      "price": 11999,
+      "inStock": true,
+      "promo": "24 期免息",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "unicom",
+      "date": "2026-09-18",
+      "price": 11999,
+      "inStock": true,
+      "promo": "12 期免息",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 16499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 16499,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 16499,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 16499,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 21499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "dewu",
+      "date": "2026-10-14",
+      "price": 21300,
+      "inStock": true,
+      "promo": "成交均价（银色）",
+      "source": "公开报道：得物 App 成交均价"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 21499,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 21499,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 21499,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 10999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "dewu",
+      "date": "2026-10-14",
+      "price": 11827,
+      "inStock": true,
+      "promo": "成交均价（勃艮第酒红）",
+      "source": "公开报道：得物 App 成交均价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 10999,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-256",
+      "channel": "pdd",
+      "date": "2026-10-14",
+      "price": 9999,
+      "inStock": true,
+      "promo": "百亿补贴直降 1000 元",
+      "source": "公开报道：百亿补贴到手价"
+    },
+    {
+      "variant": "max-256",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 10999,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-256",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 10999,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "max-512",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 12999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "max-512",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 12999,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 12999,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-512",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 12999,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 15499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 15499,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 15499,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 15499,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 20499,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 20499,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 20499,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 20499,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 9999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 9999,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "pdd",
+      "date": "2026-10-14",
+      "price": 8999,
+      "inStock": true,
+      "promo": "百亿补贴直降 1000 元",
+      "source": "公开报道：百亿补贴到手价"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 9999,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 9999,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "apple",
+      "date": "2026-10-14",
+      "price": 11999,
+      "inStock": true,
+      "promo": "原价发售",
+      "source": "Apple 中国官网国行定价"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "jd",
+      "date": "2026-10-14",
+      "price": 11999,
+      "inStock": true,
+      "promo": "以旧换新至高 900 元",
+      "source": "公开报道：以旧换新补贴 + 免息券"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "tmall",
+      "date": "2026-10-14",
+      "price": 11999,
+      "inStock": true,
+      "promo": "24 期免息 + 以旧换新至高 900 元",
+      "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "unicom",
+      "date": "2026-10-14",
+      "price": 11999,
+      "inStock": true,
+      "promo": "12 期免息 + 淘金币抵扣 100",
+      "source": "平台商品页标价"
+    }
+  ],
+  "events": [
+    {
+      "date": "2026-09-10",
+      "kind": "launch",
+      "title": "iPhone 18 Pro 系列发布，国行全线上调",
+      "body": "苹果秋季发布会推出 iPhone 18 Pro / Pro Max。相比 iPhone 17 Pro，256GB 与 512GB 上调 1000 元，1TB 上调 2500 元，并新增 2TB 版本。同步下架 iPhone 17 Pro 系列。"
+    },
+    {
+      "date": "2026-09-12",
+      "kind": "presale",
+      "title": "20:00 预售开启，热门型号迅速售罄",
+      "body": "「苹果18抢不到」登上热搜。冰川蓝配色最受欢迎，多个热门型号首批货源售罄，二级市场随即出现高溢价。"
+    },
+    {
+      "date": "2026-09-18",
+      "kind": "onsale",
+      "title": "正式发售，Pro 机型线下回收遇冷",
+      "body": "门店如往年排长队，但二级市场行情明显分化：标准版 iPhone 18 Pro 多地线下无人回收、部分黄牛直接拒收，仅 Pro Max 维持小幅溢价。「原价收」成为常态。"
+    },
+    {
+      "date": "2026-09-19",
+      "kind": "price",
+      "title": "溢价快速退潮，得物价格较高点回落超 2500 元",
+      "body": "得物数据显示，Pro Max 2TB 银色成交均价由预售首日 23844 元降至 21300 元；Pro Max 256GB 勃艮第酒红由 13888 元降至 11827 元，降幅约 14.8%。"
+    },
+    {
+      "date": "2026-10-14",
+      "kind": "price",
+      "title": "第三方补贴压低到手价，百亿补贴直降 1000 元",
+      "body": "拼多多百亿补贴将 Pro 256GB 压到 8999 元、Pro Max 256GB 压到 9999 元，均比官网低 1000 元；官方与自营渠道维持原价，转而用免息分期和以旧换新补贴留住用户。"
+    }
+  ]
+}
