@@ -23,7 +23,7 @@
 
 因此**苹果团是唯一自动数据源，也是走势图的数据基础**：报价表给当天快照，成交记录按日回填历史。
 
-## 二、四个命令
+## 二、五个命令
 
 | 命令 | 作用 |
 |------|------|
@@ -155,8 +155,28 @@ pro-256,tuan-hk,,9290,银色最低,手工录入
    **改数据库密码 + 清理 git 历史**（`git filter-repo --path backend/config.example.properties --invert-paths`）。
 2. 服务器私钥同理：确认 `~/.ssh/authorized_keys` 旧公钥已删、密钥已换、历史已清。
 3. 后台密码与数据库密码不要复用，nginx 走 HTTPS。
+4. **记忆/笔记类文件同样会公开**——仓库根目录就是网站根目录，凡是 git 跟踪的文件都能被下载。
+   历史教训：助手的项目记忆目录 `.workbuddy/memory/` 曾被跟踪，里面写过明文数据库密码，
+   `https://charleslee.fun/.workbuddy/memory/2026-10-14.md` 可直接下载。
+   已 `.gitignore` + `git rm -r --cached .workbuddy/`（本地保留）。**任何写进仓库的文件都不许含真实凭据。**
 
-## 九、构建
+## 九、常见报错（排错）
+
+程序启动会先打印一段 `[config] ...` 生效配置摘要（不含密码），排错先看这几行确认读的是哪个文件、哪套配置。
+
+| 报错 | 原因 | 处理 |
+|---|---|---|
+| `[FATAL] For input string: ""` | 数字型配置项**留空**（如 `http.proxyPort=`、`admin.port=`）。旧版 jar 的行为 | 换新 jar 即可：现在**留空 = 用默认值** |
+| `[FATAL] 配置项 http.proxyPort 必须是整数，当前写的是 "abc"` | 配置项值写错了 | 按提示改该项，或留空用默认值 |
+| `[FATAL] 缺少必需配置项: db.url` | 只有 `db.url`/`db.user`/`db.password` 三项必填 | 补齐这三项 |
+| `[FATAL] 配置文件不存在或无法读取: /xxx（当前目录 /yyy）` | 路径不对 / 不在程序所在目录 | 用绝对路径：`java -jar price-radar-crawler.jar /opt/data/charleslee/radar/config.properties` |
+| `连接超时或握手被拒（常见原因：本机 IP 不在数据库白名单 / 端口不通）` | 数据库防火墙没放行 | 把应用服务器 IP 加进白名单 |
+| `[crawler] tuan 失败: ...` | 对端改版或网络不通 | 跑 `--diagnose config.properties` 看是网络层还是解析层 |
+
+配置文件规则：**除 `db.url` / `db.user` / `db.password` 必填外，其余项留空一律取程序内置默认值**，不会报错；
+只有写了非法值才会点名具体配置项。
+
+## 十、构建
 
 ```bash
 cd backend && mvn package -DskipTests

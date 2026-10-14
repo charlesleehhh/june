@@ -32,32 +32,50 @@ import static fun.charleslee.radar.Tables.VARIANT;
  */
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-        if (args.length > 0 && "--diagnose".equals(args[0])) {
-            Diagnose.run(args.length > 1 ? args[1] : "config.properties");
-            return;
-        }
-        if (args.length > 1 && "--ingest".equals(args[0])) {
-            Ingest.run(args[1], args.length > 2 ? args[2] : "config.properties");
-            return;
-        }
-        if (args.length > 0 && "--serve".equals(args[0])) {
-            AdminServer.start(Config.load(args.length > 1 ? args[1] : "config.properties"));
-            return;
-        }
-        if (args.length > 0 && "--dry-run".equals(args[0])) {
-            DryRun.run(args.length > 1 ? args[1] : "config.properties");
-            return;
-        }
-        String cfgPath = args.length > 0 ? args[0] : "config.properties";
-        int exit;
+    public static void main(String[] args) {
+        String mode = (args.length > 0 && args[0].startsWith("--")) ? args[0] : "";
+        String cfgPath = cfgPath(args);
         try {
-            exit = new Main().run(Config.load(cfgPath));
+            if ("--diagnose".equals(mode)) {
+                Diagnose.run(cfgPath);
+                return;
+            }
+            if ("--ingest".equals(mode)) {
+                if (args.length < 2) {
+                    System.err.println("[FATAL] 用法: --ingest <prices.csv|json> [config.properties]");
+                    System.exit(2);
+                }
+                Ingest.run(args[1], args.length > 2 ? args[2] : "config.properties");
+                return;
+            }
+            if ("--serve".equals(mode)) {
+                Config cfg = Config.load(cfgPath);
+                System.out.println(cfg.describe());
+                AdminServer.start(cfg);
+                return;
+            }
+            if ("--dry-run".equals(mode)) {
+                DryRun.run(cfgPath);
+                return;
+            }
+            Config cfg = Config.load(cfgPath);
+            System.out.println(cfg.describe());
+            System.exit(new Main().run(cfg));
+        } catch (IllegalArgumentException e) {
+            // 配置类错误：只给人话，不打堆栈（也不会写库）
+            System.err.println("[FATAL] " + e.getMessage());
+            System.exit(2);
         } catch (Exception e) {
             System.err.println("[FATAL] " + Db.reason(e));
-            exit = 2;
+            System.exit(2);
         }
-        System.exit(exit);
+    }
+
+    /** 取配置文件路径：--xxx 模式下配置路径是最后一个参数（--ingest 另见 main 内单独处理）。 */
+    private static String cfgPath(String[] args) {
+        if (args.length == 0) return "config.properties";
+        if (!args[0].startsWith("--")) return args[0];
+        return args.length > 1 ? args[args.length - 1] : "config.properties";
     }
 
     private int run(Config cfg) {
