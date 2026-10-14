@@ -12,3 +12,8 @@ _*.js
 # Java 后端
 backend/target/
 backend/config.properties
+backend/dependency-reduced-pom.xml
+
+# IDE
+.idea/
+*.iml

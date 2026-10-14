@@ -4,8 +4,8 @@
     "launchDate": "2026-09-18",
     "currency": "CNY",
     "title": "果价雷达",
-    "subtitle": "iPhone 18 Pro 全网比价",
-    "notice": "价格均为公开渠道信息整理，仅供比价参考，不构成购买建议。请以各平台实时页面为准。"
+    "subtitle": "iPhone 18 Pro 价格走势与成交记录",
+    "notice": "价格与成交记录来自苹果团公开报价页，仅供比价参考，不构成购买建议。京东/拼多多等平台无公开价格接口，暂不收录。"
   },
   "variants": [
     {
@@ -113,6 +113,22 @@
       "sort": 6,
       "service": "二级市场成交均价，非官方渠道，行情波动大",
       "buyUrl": ""
+    },
+    {
+      "id": "tuan-g",
+      "name": "苹果团 · 国行现货",
+      "kind": "3rd",
+      "sort": 7,
+      "service": "深圳现货，实时报价，排单发货",
+      "buyUrl": "https://appletuan.com/quotes/1"
+    },
+    {
+      "id": "tuan-hk",
+      "name": "苹果团 · 港行现货",
+      "kind": "3rd",
+      "sort": 8,
+      "service": "港行现货，可直营店保修",
+      "buyUrl": "https://appletuan.com/quotes/1"
     }
   ],
   "records": [
@@ -441,6 +457,105 @@
       "source": "平台商品页标价"
     },
     {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-09-20",
+      "price": 13750,
+      "inStock": true,
+      "promo": "当日最低成交（2 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-09-23",
+      "price": 13450,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-09-24",
+      "price": 13450,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-g",
+      "date": "2026-09-27",
+      "price": 14250,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-10-01",
+      "price": 12890,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "tuan-hk",
+      "date": "2026-10-08",
+      "price": 15449,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-256",
+      "channel": "tuan-hk",
+      "date": "2026-10-08",
+      "price": 10849,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-10-08",
+      "price": 12169,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-10-10",
+      "price": 12250,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-10-12",
+      "price": 12190,
+      "inStock": true,
+      "promo": "当日最低成交（1 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-10-13",
+      "price": 12150,
+      "inStock": true,
+      "promo": "当日最低成交（3 笔）",
+      "source": "crawler-tuan-orders"
+    },
+    {
       "variant": "max-1024",
       "channel": "apple",
       "date": "2026-10-14",
@@ -466,6 +581,24 @@
       "inStock": true,
       "promo": "24 期免息 + 以旧换新至高 900 元",
       "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 16930,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "max-1024",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 15190,
+      "inStock": true,
+      "promo": "银色最低",
+      "source": "crawler-tuan"
     },
     {
       "variant": "max-1024",
@@ -511,6 +644,24 @@
       "inStock": true,
       "promo": "24 期免息 + 以旧换新至高 900 元",
       "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 20950,
+      "inStock": true,
+      "promo": "勃艮第酒红最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "max-2048",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 18990,
+      "inStock": true,
+      "promo": "勃艮第酒红最低",
+      "source": "crawler-tuan"
     },
     {
       "variant": "max-2048",
@@ -568,6 +719,24 @@
     },
     {
       "variant": "max-256",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 11230,
+      "inStock": true,
+      "promo": "黑色最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "max-256",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 10250,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "max-256",
       "channel": "unicom",
       "date": "2026-10-14",
       "price": 10999,
@@ -604,6 +773,24 @@
     },
     {
       "variant": "max-512",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 13690,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 12150,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "max-512",
       "channel": "unicom",
       "date": "2026-10-14",
       "price": 12999,
@@ -640,6 +827,24 @@
     },
     {
       "variant": "pro-1024",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 15630,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "pro-1024",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 14150,
+      "inStock": true,
+      "promo": "银色最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "pro-1024",
       "channel": "unicom",
       "date": "2026-10-14",
       "price": 15499,
@@ -673,6 +878,24 @@
       "inStock": true,
       "promo": "24 期免息 + 以旧换新至高 900 元",
       "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 18850,
+      "inStock": true,
+      "promo": "勃艮第酒红最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "pro-2048",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 18050,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
     },
     {
       "variant": "pro-2048",
@@ -721,6 +944,24 @@
     },
     {
       "variant": "pro-256",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 9830,
+      "inStock": true,
+      "promo": "黑色最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "pro-256",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 9290,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "pro-256",
       "channel": "unicom",
       "date": "2026-10-14",
       "price": 9999,
@@ -754,6 +995,24 @@
       "inStock": true,
       "promo": "24 期免息 + 以旧换新至高 900 元",
       "source": "公开报道：24 期免息 + 以旧换新补贴"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "tuan-g",
+      "date": "2026-10-14",
+      "price": 11990,
+      "inStock": true,
+      "promo": "黑色最低",
+      "source": "crawler-tuan"
+    },
+    {
+      "variant": "pro-512",
+      "channel": "tuan-hk",
+      "date": "2026-10-14",
+      "price": 10890,
+      "inStock": true,
+      "promo": "冰川蓝最低",
+      "source": "crawler-tuan"
     },
     {
       "variant": "pro-512",
@@ -795,6 +1054,143 @@
       "kind": "price",
       "title": "第三方补贴压低到手价，百亿补贴直降 1000 元",
       "body": "拼多多百亿补贴将 Pro 256GB 压到 8999 元、Pro Max 256GB 压到 9999 元，均比官网低 1000 元；官方与自营渠道维持原价，转而用免息分期和以旧换新补贴留住用户。"
+    }
+  ],
+  "orders": [
+    {
+      "orderNo": "20261014****4333",
+      "at": "2026-10-14 10:17:43",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "银色",
+      "listPrice": 12999,
+      "paid": 12190
+    },
+    {
+      "orderNo": "20261013****4128",
+      "at": "2026-10-13 23:56:41",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "冰川蓝色",
+      "listPrice": 12999,
+      "paid": 12150
+    },
+    {
+      "orderNo": "20261013****5518",
+      "at": "2026-10-13 23:07:55",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "冰川蓝色",
+      "listPrice": 12999,
+      "paid": 12150
+    },
+    {
+      "orderNo": "20261013****3301",
+      "at": "2026-10-13 12:18:33",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "银色",
+      "listPrice": 12999,
+      "paid": 12190
+    },
+    {
+      "orderNo": "20261012****5707",
+      "at": "2026-10-12 12:49:57",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "银色",
+      "listPrice": 12999,
+      "paid": 12190
+    },
+    {
+      "orderNo": "20261010****2257",
+      "at": "2026-10-10 10:28:22",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "银色",
+      "listPrice": 12999,
+      "paid": 12250
+    },
+    {
+      "orderNo": "20261008****1531",
+      "at": "2026-10-08 15:21:15",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "冰川蓝色",
+      "listPrice": 12999,
+      "paid": 12169
+    },
+    {
+      "orderNo": "20261008****0165",
+      "at": "2026-10-08 11:08:01",
+      "variant": "max-1024",
+      "channel": "tuan-hk",
+      "color": "冰川蓝色",
+      "listPrice": 16499,
+      "paid": 15449
+    },
+    {
+      "orderNo": "20261008****5476",
+      "at": "2026-10-08 01:42:54",
+      "variant": "max-256",
+      "channel": "tuan-hk",
+      "color": "冰川蓝色",
+      "listPrice": 10999,
+      "paid": 10849
+    },
+    {
+      "orderNo": "20261001****2652",
+      "at": "2026-10-01 15:28:26",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "冰川蓝色",
+      "listPrice": 12999,
+      "paid": 12890
+    },
+    {
+      "orderNo": "20260927****2422",
+      "at": "2026-09-27 14:39:24",
+      "variant": "max-512",
+      "channel": "tuan-g",
+      "color": "勃艮第酒红色",
+      "listPrice": 12999,
+      "paid": 14250
+    },
+    {
+      "orderNo": "20260924****4534",
+      "at": "2026-09-24 22:42:45",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "银色",
+      "listPrice": 12999,
+      "paid": 13450
+    },
+    {
+      "orderNo": "20260923****5624",
+      "at": "2026-09-23 14:19:56",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "银色",
+      "listPrice": 12999,
+      "paid": 13450
+    },
+    {
+      "orderNo": "20260920****2702",
+      "at": "2026-09-20 11:08:27",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "冰川蓝色",
+      "listPrice": 12999,
+      "paid": 13989
+    },
+    {
+      "orderNo": "20260920****0773",
+      "at": "2026-09-20 10:53:07",
+      "variant": "max-512",
+      "channel": "tuan-hk",
+      "color": "勃艮第酒红色",
+      "listPrice": 12999,
+      "paid": 13750
     }
   ]
 }

@@ -6,12 +6,14 @@
 
 var DATA = null;
 var CH_COLOR = {
-  apple:  '#0b63c5',
-  tmall:  '#e0662a',
-  jd:     '#b81d5b',
-  unicom: '#0f8f95',
-  pdd:    '#7a5af8',
-  dewu:   '#8a6d3b'
+  'tuan-hk': '#0b63c5',
+  'tuan-g':  '#0f8f95',
+  apple:     '#b81d5b',
+  tmall:     '#e0662a',
+  jd:        '#c9a227',
+  pdd:       '#7a5af8',
+  dewu:      '#8a6d3b',
+  idle:      '#6b7280'
 };
 var KIND_LABEL = {
   official: '官方', self: '自营', subsidy: '补贴', operator: '运营商', resale: '二级市场'
@@ -21,7 +23,7 @@ var TODAY = new Date().toISOString().slice(0, 10);
 var state = {
   series: 'iPhone 18 Pro',
   variantId: 'pro-256',
-  range: 0,              // 0 = 全部
+  range: 0,              // 0 = 全部；其余为「近 N 天」
   hidden: {}             // 走势图隐藏的渠道
 };
 
@@ -74,11 +76,10 @@ function dateShort(d) { return d.slice(5).replace('-', '/'); }
 
 /* ---------------- 路由 ---------------- */
 var ROUTES = [
-  { hash: '#/',       label: '比价总览', view: viewOverview },
-  { hash: '#/trend',  label: '价格走势', view: viewTrend },
-  { hash: '#/events', label: '行情大事记', view: viewEvents },
-  { hash: '#/watch',  label: '我的关注', view: viewWatch },
-  { hash: '#/admin',  label: '数据维护', view: viewAdmin }
+  { hash: '#/',          label: '价格走势', view: viewTrend },
+  { hash: '#/compare',   label: '各渠道比价', view: viewOverview },
+  { hash: '#/events',    label: '行情大事记', view: viewEvents },
+  { hash: '#/watch',     label: '我的关注', view: viewWatch }
 ];
 function currentHash() {
   var h = location.hash || '#/';
@@ -96,9 +97,8 @@ function render() {
   renderNav();
   var route = ROUTES.filter(function (r) { return r.hash === currentHash(); })[0];
   $('#view').innerHTML = route.view();
-  if (route.hash === '#/trend') mountChart();
+  if (route.hash === '#/') mountChart();
   if (route.hash === '#/watch') mountWatch();
-  if (route.hash === '#/admin') mountAdmin();
   window.scrollTo(0, 0);
 }
 
@@ -191,34 +191,161 @@ function maxSpread(vid) {
   return '¥' + yuan(Math.max.apply(null, vals) - Math.min.apply(null, vals));
 }
 
-/* ---------------- 视图 2：价格走势 ---------------- */
+/* ---------------- 视图 1：价格走势（首页） ---------------- */
+var RANGES = [{ label: '全部', days: 0 }, { label: '近 30 天', days: 30 }, { label: '近 7 天', days: 7 }];
+
+function rangeStart() {
+  if (!state.range) return null;
+  return new Date(Date.now() - state.range * 86400000).toISOString().slice(0, 10);
+}
+function recordsOf(vid) {
+  var from = rangeStart();
+  return DATA.records.filter(function (r) {
+    return r.variant === vid && (!from || r.date >= from);
+  });
+}
+function byDate(a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); }
+
+/* 走势摘要：当前最低、区间涨跌、区间高低、数据点 */
+function trendSummary(vid) {
+  var v = variant(vid);
+  var recs = recordsOf(vid);
+  var byCh = {};
+  recs.forEach(function (r) { (byCh[r.channel] = byCh[r.channel] || []).push(r); });
+  Object.keys(byCh).forEach(function (k) { byCh[k].sort(byDate); });
+
+  var bestCh = null, bestRec = null;
+  Object.keys(byCh).forEach(function (k) {
+    var last = byCh[k][byCh[k].length - 1];
+    if (last.inStock === false) return;
+    if (!bestRec || last.price < bestRec.price) { bestRec = last; bestCh = k; }
+  });
+
+  var lowRec = null, highRec = null;
+  recs.forEach(function (r) {
+    if (!lowRec || r.price < lowRec.price) lowRec = r;
+    if (!highRec || r.price > highRec.price) highRec = r;
+  });
+
+  var mainCh = null, mainPts = null;
+  Object.keys(byCh).forEach(function (k) {
+    if (!mainPts || byCh[k].length > mainPts.length) { mainPts = byCh[k]; mainCh = k; }
+  });
+  var first = mainPts && mainPts.length > 1 ? mainPts[0] : null;
+  var last = mainPts && mainPts.length > 1 ? mainPts[mainPts.length - 1] : null;
+  var dates = recs.map(function (r) { return r.date; }).sort();
+  var spanDays = dates.length ? Math.round((new Date(dates[dates.length - 1]) - new Date(dates[0])) / 86400000) : 0;
+
+  return {
+    v: v, bestCh: bestCh, bestRec: bestRec, lowRec: lowRec, highRec: highRec,
+    mainCh: mainCh, first: first, last: last, points: recs.length, spanDays: spanDays,
+    channels: Object.keys(byCh).length
+  };
+}
+
 function viewTrend() {
+  var s = trendSummary(state.variantId);
+  var v = s.v;
+  var drop = (s.first && s.last) ? s.last.price - s.first.price : 0;
+  var dropPct = (s.first && s.first.price) ? (drop / s.first.price * 100) : 0;
+  var mainName = s.mainCh ? (channel(s.mainCh) || {}).name : '';
+  var d5 = function (d) { return d.slice(5).replace('-', '/'); };
+
+  var statCards = '' +
+    '<div class="card best-main">' +
+      '<div class="k">当前全网最低到手价' +
+        (s.bestCh ? ' <span class="pill ' + (channel(s.bestCh) || {}).kind + '">' + esc((channel(s.bestCh) || {}).name) + '</span>' : '') +
+      '</div>' +
+      '<div class="price"><span class="cur">¥</span>' + (s.bestRec ? yuan(s.bestRec.price) : '—') +
+        '<span class="sub">官方价 ¥' + yuan(v.official) + '</span></div>' +
+      '<div style="margin-top:12px">' + (s.bestRec ? deltaHTML(s.bestRec.price, v.official) : '') + '</div>' +
+      '<div class="meta">' + (s.bestRec ? '记录日期 <b>' + s.bestRec.date + '</b>　·　' + esc(s.bestRec.promo || '') : '暂无记录') + '</div>' +
+    '</div>' +
+    '<div class="card best-side">' +
+      '<div class="stat"><span class="lab">区间涨跌</span><span class="val sm">' +
+        (s.first && s.last ? ((drop < 0 ? '↓' : '↑') + ' ¥' + yuan(Math.abs(drop)) + '（' + dropPct.toFixed(1) + '%）') : '—') +
+        '</span></div>' +
+      '<div class="stat"><span class="lab">统计区间</span><span class="val sm">' + s.spanDays + ' 天</span></div>' +
+      '<div class="stat"><span class="lab">区间最低</span><span class="val sm">¥' + (s.lowRec ? yuan(s.lowRec.price) : '—') +
+        (s.lowRec ? ' · ' + d5(s.lowRec.date) : '') + '</span></div>' +
+      '<div class="stat"><span class="lab">区间最高</span><span class="val sm">¥' + (s.highRec ? yuan(s.highRec.price) : '—') +
+        (s.highRec ? ' · ' + d5(s.highRec.date) : '') + '</span></div>' +
+      '<div class="stat"><span class="lab">数据点 / 渠道</span><span class="val sm">' + s.points + ' / ' + s.channels + '</span></div>' +
+    '</div>';
+
   return '' +
-  '<section class="hero"><h1>价格走势</h1>' +
-    '<p class="sub">同一个配置在各渠道的价格随时间的走向。点击图例可临时隐藏某条线。</p>' +
+  '<section class="hero">' +
+    '<h1>' + esc(v.series) + ' ' + esc(v.storage) + ' 价格走势</h1>' +
+    '<p class="sub">' +
+      (s.first && s.last
+        ? '以 <b>' + esc(mainName) + '</b> 为主线：' + d5(s.first.date) + ' 的 ¥' + yuan(s.first.price) +
+          ' → ' + d5(s.last.date) + ' 的 ¥' + yuan(s.last.price) + '，' + s.spanDays + ' 天' +
+          (drop < 0 ? '下跌' : '上涨') + ' <b>¥' + yuan(Math.abs(drop)) + '</b>（' + dropPct.toFixed(1) + '%）。'
+        : '') +
+      '数据来自苹果团实时报价与真实成交记录。' +
+    '</p>' +
     '<div class="selector">' +
       '<div class="field"><label>机型</label><div class="seg" id="seg-series">' +
-        ['iPhone 18 Pro', 'iPhone 18 Pro Max'].map(function (s) {
-          return '<button data-series="' + s + '" class="' + (s === state.series ? 'on' : '') + '">' + s + '</button>';
+        ['iPhone 18 Pro', 'iPhone 18 Pro Max'].map(function (x) {
+          return '<button data-series="' + x + '" class="' + (x === state.series ? 'on' : '') + '">' + x + '</button>';
         }).join('') + '</div></div>' +
       '<div class="field"><label>存储容量</label><div class="seg tight" id="seg-storage">' +
         variantsOfSeries(state.series).map(function (x) {
           return '<button data-variant="' + x.id + '" class="' + (x.id === state.variantId ? 'on' : '') + '">' + x.storage + '</button>';
         }).join('') + '</div></div>' +
+      '<div class="field"><label>时间范围</label><div class="seg tight" id="seg-range">' +
+        RANGES.map(function (r) {
+          return '<button data-range="' + r.days + '" class="' + (r.days === state.range ? 'on' : '') + '">' + r.label + '</button>';
+        }).join('') + '</div></div>' +
     '</div>' +
+    '<div class="best">' + statCards + '</div>' +
   '</section>' +
+
   '<section class="sect"><div class="card chart-box">' +
     '<div class="chart-legend" id="legend"></div>' +
     '<svg class="chart" id="chart" viewBox="0 0 1000 360" preserveAspectRatio="none"></svg>' +
-    '<p style="color:var(--faint);font-size:12.5px;margin:10px 4px 4px">折线为各渠道「成交/标价」记录点之间连线，非连续行情；缺口表示该渠道未记录到数据。</p>' +
-  '</div></section>';
+    '<p style="color:var(--faint);font-size:12.5px;margin:10px 4px 4px">' +
+      '实心圆点是各渠道在区间内的最低价，虚线竖线是行情大事记节点；点击图例可隐藏某条线，悬停查看明细。</p>' +
+  '</div></section>' +
+
+  '<section class="sect">' +
+    '<div class="sect-head"><h2>真实成交记录</h2><span class="hint">苹果团现货订单 · 按成交时间倒序</span></div>' +
+    ordersTable() +
+  '</section>';
+}
+
+function ordersTable() {
+  var list = (DATA.orders || []).slice(0, 14);
+  if (!list.length) {
+    return '<div class="card"><div class="empty">暂无成交记录（下次抓取后会显示）</div></div>';
+  }
+  var rows = list.map(function (o) {
+    var v = variant(o.variant) || { series: o.variant, storage: '' };
+    var c = channel(o.channel) || { name: o.channel, kind: 'resale' };
+    var save = o.listPrice - o.paid;
+    return '<tr>' +
+      '<td class="mono">' + esc(o.at.slice(5, 16)) + '</td>' +
+      '<td>' + esc(v.series.replace('iPhone ', '')) + ' ' + esc(v.storage) + '</td>' +
+      '<td>' + esc(o.color || '—') + '</td>' +
+      '<td><span class="pill ' + c.kind + '">' + esc(c.name) + '</span></td>' +
+      '<td class="num mono">' + yuan(o.listPrice) + '</td>' +
+      '<td class="num"><b>¥' + yuan(o.paid) + '</b></td>' +
+      '<td class="num"><span class="delta down">省 ' + yuan(Math.round(save)) + '</span></td>' +
+      '<td class="mono" style="color:var(--faint);font-size:12px">' + esc(o.orderNo) + '</td>' +
+    '</tr>';
+  }).join('');
+  return '<div class="card grid-wrap"><table class="tbl">' +
+    '<thead><tr><th>成交时间</th><th>配置</th><th>颜色</th><th>渠道</th>' +
+    '<th style="text-align:right">官网价</th><th style="text-align:right">实付</th>' +
+    '<th style="text-align:right">较官网</th><th>订单号</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div>';
 }
 
 function seriesFor(vid) {
   var out = {};
   channelsSorted().forEach(function (c) { out[c.id] = { ch: c, pts: [] }; });
-  DATA.records.forEach(function (r) {
-    if (r.variant !== vid || !out[r.channel]) return;
+  recordsOf(vid).forEach(function (r) {
+    if (!out[r.channel]) return;
     out[r.channel].pts.push({ x: r.date, y: r.price, rec: r });
   });
   Object.keys(out).forEach(function (k) {
@@ -301,18 +428,48 @@ function drawChart(series, v) {
     out += '<text class="axis-t" x="' + X(ds).toFixed(1) + '" y="' + (H - 14) + '" text-anchor="middle">' + dateShort(ds) + '</text>';
   }
 
-  // 折线
+  // 行情大事记：竖虚线标注，让「为什么涨/跌」看得见
+  (DATA.events || []).forEach(function (ev) {
+    var t = new Date(ev.date).getTime();
+    if (t < x0 || t > x1) return;
+    var x = X(ev.date).toFixed(1);
+    out += '<line x1="' + x + '" y1="' + PT + '" x2="' + x + '" y2="' + (H - PB) + '" stroke="#c2b8a3" stroke-width="1" stroke-dasharray="3 4"/>';
+    out += '<circle cx="' + x + '" cy="' + (PT + 4) + '" r="10" fill="transparent" data-tip="' +
+           esc(ev.date + '｜' + ev.title + (ev.body ? '｜' + ev.body : '')) + '"/>';
+    out += '<circle cx="' + x + '" cy="' + (PT + 4) + '" r="3" fill="#b8a67e" pointer-events="none"/>';
+  });
+
+  // 折线 + 区间最低点标记
+  var globalLow = null;
+  series.forEach(function (s) {
+    s.pts.forEach(function (p) { if (!globalLow || p.y < globalLow.y) globalLow = { y: p.y, x: p.x }; });
+  });
+
   series.forEach(function (s) {
     var col = CH_COLOR[s.ch.id] || '#666';
     if (s.pts.length > 1) {
       var dstr = s.pts.map(function (p) { return (X(p.x)).toFixed(1) + ',' + Y(p.y).toFixed(1); }).join(' ');
       out += '<polyline points="' + dstr + '" fill="none" stroke="' + col + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
     }
+    var low = null;
+    s.pts.forEach(function (p) { if (!low || p.y < low.y) low = p; });
+
     s.pts.forEach(function (p) {
       out += '<circle cx="' + X(p.x).toFixed(1) + '" cy="' + Y(p.y).toFixed(1) + '" r="9" fill="transparent" ' +
-             'data-tip="' + esc(s.ch.name + '｜' + p.x + '｜¥' + yuan(p.y) + (p.rec.promo ? '｜' + p.rec.promo : '')) + '"/>';
+             'data-tip="' + esc(s.ch.name + '｜' + p.x + '｜¥' + yuan(p.y) + (p.rec.promo ? '｜' + p.rec.promo : '') +
+             (p.rec.source ? '｜' + p.rec.source : '')) + '"/>';
       out += '<circle cx="' + X(p.x).toFixed(1) + '" cy="' + Y(p.y).toFixed(1) + '" r="3.6" fill="#fff" stroke="' + col + '" stroke-width="2.2" pointer-events="none"/>';
     });
+
+    if (low && globalLow && low.y === globalLow.y) {
+      var lx = X(low.x), ly = Y(low.y);
+      out += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="6" fill="none" stroke="' + col + '" stroke-width="2" pointer-events="none"/>';
+      out += '<text class="axis-t" x="' + Math.min(W - PR - 96, lx + 9).toFixed(1) + '" y="' + (ly - 9).toFixed(1) +
+             '" fill="' + col + '" style="font-size:12px">区间最低 ¥' + yuan(low.y) + '</text>';
+    } else if (low) {
+      out += '<circle cx="' + X(low.x).toFixed(1) + '" cy="' + Y(low.y).toFixed(1) + '" r="5" fill="none" stroke="' + col +
+             '" stroke-width="1.6" opacity="0.65" pointer-events="none"/>';
+    }
   });
   return out;
 }
@@ -410,123 +567,6 @@ function mountWatch() {
   };
 }
 
-/* ---------------- 视图 5：数据维护 ---------------- */
-function viewAdmin() {
-  var head = '<th>机型 / 容量</th><th>官方价</th>' + channelsSorted().map(function (c) {
-    return '<th>' + esc(c.name) + '</th>';
-  }).join('') + '<th>较上次</th>';
-
-  var body = DATA.variants.map(function (v) {
-    var map = latestByChannel(v.id);
-    return '<tr data-v="' + v.id + '">' +
-      '<td class="vname">' + esc(v.series.replace('iPhone 18 Pro', 'Pro')) + ' ' + esc(v.storage) + '</td>' +
-      '<td class="mono" style="color:var(--muted)">' + yuan(v.official) + '</td>' +
-      channelsSorted().map(function (c) {
-        var r = map[c.id];
-        var ph = r ? r.price : v.official;
-        return '<td><input type="number" step="1" data-ch="' + c.id + '" data-vid="' + v.id + '" value="' + ph + '" ' +
-               'title="上次记录 ' + (r ? r.date + ' ¥' + yuan(r.price) : '无') + '"></td>';
-      }).join('') +
-      '<td class="diff" data-diff="' + v.id + '">—</td>' +
-    '</tr>';
-  }).join('');
-
-  return '<section class="hero"><h1>数据维护</h1>' +
-    '<p class="sub">把今天各渠道的实际到手价填进去，一键生成新的 <span class="mono">prices.json</span>，替换仓库文件并提交，网站就会自动更新。</p></section>' +
-
-    '<section class="sect"><div class="notice">' +
-      '<span>ℹ️</span><div>这个站点是<b>纯静态</b>的：数据文件在仓库里，<b>改文件 → git 提交 → 自动部署</b>，不依赖任何服务器或数据库。' +
-      '下面的表格已经帮你预填了每条渠道的上次价格，<b>只改变动的那几个格子</b>就行，没动的会原样保留。</div></div></section>' +
-
-    '<section class="sect">' +
-      '<div class="sect-head"><h2>今日录入</h2><span class="hint">记录日期与来源会写进新条目</span></div>' +
-      '<div class="card grid-wrap" style="padding:14px 16px">' +
-        '<table class="entry"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>' +
-        '<div class="row-actions">' +
-          '<div class="field"><label>记录日期</label><input id="a-date" type="date" value="' + TODAY + '"></div>' +
-          '<div class="field"><label>优惠说明（可选，套用到本次新增条目）</label><input id="a-promo" placeholder="例如：百亿补贴直降 1000 元" style="width:280px"></div>' +
-          '<div class="field"><label>来源说明</label><input id="a-source" value="人工录入" style="width:170px"></div>' +
-          '<button class="btn" id="a-gen">生成 prices.json</button>' +
-        '</div>' +
-        '<div id="a-out" style="margin-top:18px"></div>' +
-      '</div>' +
-    '</section>' +
-
-    '<section class="sect"><div class="sect-head"><h2>当前数据概览</h2></div>' +
-      '<div class="card" style="padding:18px 22px;font-size:14px;line-height:2">' +
-        '配置文件：<span class="mono">data/prices.json</span><br>' +
-        '机型配置：' + DATA.variants.length + ' 个　·　渠道：' + DATA.channels.length + ' 个　·　价格记录：' + DATA.records.length + ' 条　·　事件：' + DATA.events.length + ' 条<br>' +
-        '数据更新日：<b>' + esc(DATA.meta.updatedAt) + '</b>' +
-      '</div>' +
-    '</section>';
-}
-
-function mountAdmin() {
-  function refreshDiff() {
-    $$('table.entry tbody tr').forEach(function (tr) {
-      var vid = tr.getAttribute('data-v');
-      var map = latestByChannel(vid);
-      var changed = 0;
-      $$('input[data-ch]', tr).forEach(function (inp) {
-        var r = map[inp.getAttribute('data-ch')];
-        var prev = r ? r.price : null;
-        var now = parseInt(inp.value, 10);
-        if (prev !== null && now !== prev) changed++;
-      });
-      var cell = $('[data-diff="' + vid + '"]', tr);
-      cell.textContent = changed ? changed + ' 项变动' : '—';
-      cell.style.color = changed ? 'var(--accent)' : 'var(--faint)';
-    });
-  }
-  $$('table.entry input').forEach(function (i) { i.addEventListener('input', refreshDiff); });
-
-  $('#a-gen').onclick = function () {
-    var date = $('#a-date').value || TODAY;
-    var promo = $('#a-promo').value.trim();
-    var source = $('#a-source').value.trim() || '人工录入';
-    var added = 0;
-
-    var out = JSON.parse(JSON.stringify(DATA));
-    $$('table.entry tbody tr').forEach(function (tr) {
-      var vid = tr.getAttribute('data-v');
-      var map = latestByChannel(vid);
-      $$('input[data-ch]', tr).forEach(function (inp) {
-        var cid = inp.getAttribute('data-ch');
-        var val = parseInt(inp.value, 10);
-        if (!val || val <= 0) return;
-        var r = map[cid];
-        if (r && r.price === val && !promo) return;   // 没变且无新说明 → 不产生新记录
-        out.records.push({
-          variant: vid, channel: cid, date: date, price: val,
-          inStock: true, promo: promo, source: source
-        });
-        added++;
-      });
-    });
-    out.records.sort(function (a, b) {
-      if (a.date !== b.date) return a.date < b.date ? -1 : 1;
-      if (a.variant !== b.variant) return a.variant < b.variant ? -1 : 1;
-      return a.channel < b.channel ? -1 : 1;
-    });
-    out.meta.updatedAt = date;
-    var json = JSON.stringify(out, null, 2);
-
-    var blob = new Blob([json], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url; a.download = 'prices.json'; a.click();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-
-    $('#a-out').innerHTML =
-      '<div class="notice" style="background:var(--down-soft);border-color:#cbe9d7;color:#0b5c34">' +
-        '<span>✅</span><div>已生成并下载 <b>prices.json</b>，本次新增 <b>' + added + '</b> 条记录，数据更新日改为 <b>' + esc(date) + '</b>。<br>' +
-        '把它覆盖到仓库的 <span class="mono">data/prices.json</span>，提交推送，线上就会自动更新。</div></div>' +
-      '<div style="margin:14px 0 6px;font-size:13px;color:var(--muted)">文件预览（前 60 行）：</div>' +
-      '<div class="code">' + esc(json.split('\n').slice(0, 60).join('\n')) + '</div>';
-    $('#a-out').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  };
-}
-
 /* ---------------- 全局事件 ---------------- */
 document.addEventListener('click', function (e) {
   var g = e.target.closest('[data-go]');
@@ -542,6 +582,12 @@ document.addEventListener('click', function (e) {
   var vBtn = e.target.closest('[data-variant]');
   if (vBtn) {
     state.variantId = vBtn.getAttribute('data-variant');
+    render();
+    return;
+  }
+  var rBtn = e.target.closest('[data-range]');
+  if (rBtn) {
+    state.range = parseInt(rBtn.getAttribute('data-range'), 10) || 0;
     render();
     return;
   }

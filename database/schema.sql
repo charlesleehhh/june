@@ -70,6 +70,22 @@ CREATE TABLE IF NOT EXISTS fetch_log (
   records INT UNSIGNED DEFAULT 0 COMMENT '本次写入条数'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='定时任务运行日志';
 
+-- 真实成交记录（来源：苹果团订单流，前端「真实成交记录」直接展示）
+CREATE TABLE IF NOT EXISTS tuan_order (
+  id         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  order_no   VARCHAR(24) NOT NULL COMMENT '苹果团订单号',
+  trade_at   DATETIME NOT NULL COMMENT '成交时间',
+  variant_id INT UNSIGNED NOT NULL,
+  channel_id INT UNSIGNED NOT NULL,
+  color      VARCHAR(30) DEFAULT NULL,
+  list_price INT UNSIGNED NOT NULL COMMENT '官网价',
+  paid       DECIMAL(10,2) NOT NULL COMMENT '实付金额',
+  UNIQUE KEY uk_order (order_no),
+  KEY idx_trade_at (trade_at),
+  CONSTRAINT fk_to_variant FOREIGN KEY (variant_id) REFERENCES variant(id),
+  CONSTRAINT fk_to_channel FOREIGN KEY (channel_id) REFERENCES channel(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='苹果团真实成交记录';
+
 -- ============================================================
 -- 初始数据（与仓库 data/prices.json 当前内容一致，作为种子）
 -- ============================================================
@@ -91,8 +107,10 @@ INSERT INTO channel (code, name, kind, sort, service, buy_url) VALUES
   ('jd',    '京东自营', '3rd', 3, '24 期免息，以旧换新补贴至高 900 元', 'https://item.jd.com/100012043978.html'),
   ('pdd',   '拼多多百亿补贴', '3rd', 4, '百亿补贴，价格波动大', 'https://mobile.yangkeduo.com/'),
   ('dewu',  '得物', '3rd', 5, '现货溢价波动大', 'https://www.dewu.com/'),
-  ('idle',  '闲鱼(个人转卖)', '3rd', 6, '个人卖家报价，注意验机', 'https://www.goofish.com/')
-ON DUPLICATE KEY UPDATE name = VALUES(name), sort = VALUES(sort), service = VALUES(service);
+  ('idle',  '闲鱼(个人转卖)', '3rd', 6, '个人卖家报价，注意验机', 'https://www.goofish.com/'),
+  ('tuan-g',  '苹果团 · 国行现货', '3rd', 7, '深圳现货，实时报价，排单发货', 'https://appletuan.com/quotes/1'),
+  ('tuan-hk', '苹果团 · 港行现货', '3rd', 8, '港行现货，可直营店保修', 'https://appletuan.com/quotes/1')
+ON DUPLICATE KEY UPDATE name = VALUES(name), sort = VALUES(sort), service = VALUES(service), buy_url = VALUES(buy_url);
 
 INSERT INTO market_event (ev_date, kind, title, body) VALUES
   ('2026-09-10', 'launch', 'iPhone 18 Pro 系列发布，国行全线上调',

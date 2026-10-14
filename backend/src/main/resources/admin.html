@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>果价雷达 · 数据维护（管理员）</title>
+<style>
+  :root { --bg:#f6f6f4; --panel:#fff; --line:#e3e2de; --ink:#26262a; --muted:#75757d; --accent:#0f6e56; --warn:#a32d2d; }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif }
+  header { background:var(--panel); border-bottom:1px solid var(--line); padding:14px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap }
+  header h1 { font-size:15px; font-weight:500; margin:0 }
+  .badge { font-size:12px; color:#fff; background:var(--accent); border-radius:20px; padding:2px 10px }
+  .wrap { padding:18px 20px 60px }
+  .bar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:16px; overflow:auto }
+  table { border-collapse:collapse; min-width:100% }
+  th,td { border-bottom:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:top; white-space:nowrap }
+  th { font-weight:500; font-size:12px; color:var(--muted); background:#fafaf8; position:sticky; top:0 }
+  td.v { font-weight:500 }
+  td.v small { display:block; color:var(--muted); font-weight:400; font-size:12px }
+  input[type=text],input[type=number],input[type=date],textarea {
+    font:inherit; padding:5px 7px; border:1px solid var(--line); border-radius:6px; background:#fff; width:88px }
+  input.promo { width:88px; font-size:12px; margin-top:4px; color:var(--muted) }
+  input.changed { border-color:var(--accent); background:#f0faf6 }
+  textarea { width:100%; min-height:150px; font-family:ui-monospace,Menlo,monospace; font-size:12px }
+  button { font:inherit; padding:7px 14px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer }
+  button.ghost { background:#fff; color:var(--ink); border-color:var(--line) }
+  button:disabled { opacity:.5; cursor:default }
+  .hint { color:var(--muted); font-size:12px }
+  .msg { margin-left:auto; font-size:13px }
+  .msg.ok { color:var(--accent) }
+  .msg.err { color:var(--warn) }
+  h2 { font-size:14px; font-weight:500; margin:0 0 8px }
+</style>
+</head>
+<body>
+<header>
+  <h1>果价雷达 · 数据维护</h1>
+  <span class="badge">仅管理员</span>
+  <span class="hint">保存后立即写库并重新生成线上 prices.json</span>
+</header>
+
+<div class="wrap">
+  <div class="bar">
+    <label>报价日期 <input type="date" id="date"></label>
+    <button id="save">保存并生成</button>
+    <button class="ghost" id="csv">导出全部 CSV</button>
+    <button class="ghost" id="reload">重新载入</button>
+    <span class="msg" id="msg"></span>
+  </div>
+  <div class="hint" style="margin-bottom:10px">只填变了的价格，留空的格子不会改动。绿色边框表示本次修改过。格子上方小字是上次报价，括号内是官网价。</div>
+
+  <div class="card"><table id="grid"></table></div>
+
+  <div class="card">
+    <h2>行情大事记（整体替换，改动后点保存）</h2>
+    <textarea id="events"></textarea>
+    <div class="bar" style="margin:10px 0 0">
+      <button id="saveEvents">保存大事记</button>
+      <span class="hint">格式：[{"date":"2026-10-14","kind":"price","title":"标题","body":"说明"}]</span>
+    </div>
+  </div>
+</div>
+
+<script>
+var state = { variants: [], channels: [], latest: {}, events: [] };
+
+function $(s) { return document.querySelector(s); }
+function msg(text, cls) { var m = $("#msg"); m.textContent = text; m.className = "msg " + (cls || ""); }
+
+function load() {
+  fetch("api/state").then(function (r) { return r.json(); }).then(function (d) {
+    state = d;
+    $("#date").value = d.today;
+    renderGrid();
+    $("#events").value = JSON.stringify(d.events, null, 2);
+    msg("已载入 " + d.variants.length + " 个机型 × " + d.channels.length + " 个渠道", "ok");
+  }).catch(function (e) { msg("载入失败：" + e.message, "err"); });
+}
+
+function renderGrid() {
+  var t = $("#grid");
+  var html = "<tr><th>机型 / 容量</th>";
+  state.channels.forEach(function (c) { html += "<th>" + c.name + "</th>"; });
+  html += "</tr>";
+  state.variants.forEach(function (v) {
+    html += "<tr><td class='v'>" + v.series + "<small>" + v.storage + " · 官网 ¥" + v.official + "</small></td>";
+    state.channels.forEach(function (c) {
+      var key = v.code + "|" + c.code;
+      var last = state.latest[key];
+      var val = last ? last.price : "";
+      var promo = last && last.promo ? last.promo : "";
+      var sub = last ? "上次 " + last.date : "尚无记录";
+      html += "<td title='" + sub + "'>" +
+        "<input type='number' class='price' data-v='" + v.code + "' data-c='" + c.code + "' value='" + val + "' placeholder='-'>" +
+        "<input type='text' class='promo' data-v='" + v.code + "' data-c='" + c.code + "' value=\"" + promo.replace(/"/g, "&quot;") + "\" placeholder='优惠说明'>" +
+        "</td>";
+    });
+    html += "</tr>";
+  });
+  t.innerHTML = html;
+
+  t.querySelectorAll("input").forEach(function (el) {
+    el.addEventListener("input", function () { el.classList.add("changed"); });
+  });
+}
+
+function collect() {
+  var date = $("#date").value;
+  var list = [];
+  $("#grid").querySelectorAll("input.price").forEach(function (el) {
+    if (!el.classList.contains("changed")) return;
+    var price = parseInt(el.value, 10);
+    if (!price || price <= 0) return;
+    var promoEl = $("#grid").querySelector("input.promo[data-v='" + el.dataset.v + "'][data-c='" + el.dataset.c + "']");
+    list.push({ variant: el.dataset.v, channel: el.dataset.c, date: date, price: price, promo: promoEl ? promoEl.value : "" });
+  });
+  return list;
+}
+
+$("#save").addEventListener("click", function () {
+  var list = collect();
+  if (!list.length) { msg("没有修改任何价格", "err"); return; }
+  var btn = this; btn.disabled = true; msg("保存中…");
+  fetch("api/prices", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(list) })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      msg("已写入 " + d.ok + " 条" + (d.skip ? "，跳过 " + d.skip + " 条" : "") + "，线上数据已更新", "ok");
+      btn.disabled = false;
+      load();
+    })
+    .catch(function (e) { msg("保存失败：" + e.message, "err"); btn.disabled = false; });
+});
+
+$("#saveEvents").addEventListener("click", function () {
+  var arr;
+  try { arr = JSON.parse($("#events").value); } catch (e) { msg("大事记 JSON 格式错误：" + e.message, "err"); return; }
+  fetch("api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(arr) })
+    .then(function (r) { return r.json(); })
+    .then(function (d) { msg("大事记已保存 " + d.ok + " 条", "ok"); })
+    .catch(function (e) { msg("保存失败：" + e.message, "err"); });
+});
+
+$("#csv").addEventListener("click", function () { window.location.href = "api/export.csv"; });
+$("#reload").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>
